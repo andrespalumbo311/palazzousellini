@@ -1,0 +1,34 @@
+# Static Site Generator Build Outputs
+public/
+resources/_gen/
+dist/
+.hugo_build.lock
+
+# Environment & Credentials
+.env
+.env.*
+*.secret
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+*~
+*.swp
+.idea/
+.vscode/
+
+# Node / Bundlers (if used)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (temporary migration scripts / venv)
+__pycache__/
+*.py[cod]
+.venv/
+
+# Inbox drop zone (ignore dropped files except keep files)
+inbox/*
+!inbox/.gitkeep
+!inbox/README.md

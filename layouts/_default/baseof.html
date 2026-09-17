@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.Locale | default "it-IT" }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ if not .IsHome }}{{ .Title }} | {{ end }}{{ site.Title }}</title>
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+
+  <!-- Open Graph / Meta Social -->
+  <meta property="og:title" content="{{ if not .IsHome }}{{ .Title }} | {{ end }}{{ site.Title }}">
+  <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+  <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:locale" content="{{ site.Language.Locale | default "it_IT" }}">
+
+  <!-- Favicon / Brand -->
+  <link rel="icon" type="image/png" href="/images/logo.png">
+
+  <!-- Fogli di Stile -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  {{ if or (eq .Section "contatti") (eq .Type "contatti") (hasSuffix .RelPermalink "/contatti/") }}
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+  <script src="/vendor/leaflet/leaflet.js" defer></script>
+  {{ end }}
+
+  <!-- Script Interazioni e Lightbox (Differito per rendering istantaneo) -->
+  <script src="/js/main.js" defer></script>
+</head>
+<body>
+  <!-- Header del sito con effetto scroll e navigazione -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="{{ site.Home.RelPermalink }}" class="site-brand">
+        <img src="/images/logo.png" alt="Palazzo Usellini" class="site-logo">
+        <span class="site-title">{{ site.Title }}</span>
+      </a>
+
+      <div class="nav-and-lang">
+        <button class="menu-toggle" aria-label="Apri menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav class="site-nav">
+          <ul>
+            {{ range site.Menus.main }}
+              <li class="{{ if or (eq $.RelPermalink .URL) (and (ne .URL "/") (hasPrefix $.RelPermalink .URL)) }}active{{ end }}">
+                <a href="{{ .URL }}">{{ .Name }}</a>
+              </li>
+            {{ end }}
+          </ul>
+        </nav>
+
+        <!-- Switcher Bilingua (IT | EN) -->
+        <div class="lang-switcher" aria-label="Language Selector">
+          {{ if .IsTranslated }}
+            {{ range .AllTranslations }}
+              <a href="{{ .RelPermalink }}" class="lang-link {{ if eq .Lang $.Lang }}is-current{{ end }}" aria-label="{{ .Language.Label }}">{{ .Language.Label }}</a>
+            {{ end }}
+          {{ else }}
+            <a href="/" class="lang-link {{ if eq site.Language.Lang "it" }}is-current{{ end }}" aria-label="Italiano">IT</a>
+            <span class="lang-divider">|</span>
+            <a href="/en/" class="lang-link {{ if eq site.Language.Lang "en" }}is-current{{ end }}" aria-label="English">EN</a>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenuto Dinamico Principale -->
+  <main id="main" class="site-main">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  <!-- Footer Istituzionale & Privacy -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-info">
+        <h3>{{ site.Title }}</h3>
+        <p>{{ site.Params.description }}</p>
+        <p class="footer-address">📍 {{ site.Params.address }}</p>
+      </div>
+
+      <div class="footer-nav">
+        <h4>{{ if eq site.Language.Lang "en" }}Navigation{{ else }}Navigazione{{ end }}</h4>
+        <ul>
+          {{ range site.Menus.main }}
+            <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <div class="footer-legal">
+        <h4>{{ if eq site.Language.Lang "en" }}Open Content & License{{ else }}Licenza & Contenuti Aperti{{ end }}</h4>
+        <p class="footer-license">
+          {{ if eq site.Language.Lang "en" }}
+          Photos and historical texts are licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener"><strong>Creative Commons CC BY 4.0</strong></a>. Free reuse and sharing with attribution to <em>palazzousellini.com</em>.
+          {{ else }}
+          Le fotografie e i testi storici sono rilasciati con licenza <a href="https://creativecommons.org/licenses/by/4.0/deed.it" target="_blank" rel="noopener"><strong>Creative Commons CC BY 4.0</strong></a>. Libero riutilizzo e condivisione con obbligo di attribuzione a <em>palazzousellini.com</em>.
+          {{ end }}
+        </p>
+
+        <div class="footer-github">
+          <a href="https://github.com/andrespalumbo311/palazzousellini" target="_blank" rel="noopener" class="github-link">
+            <svg class="github-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span>{{ if eq site.Language.Lang "en" }}Open Source Repository on GitHub{{ else }}Codice Sorgente su GitHub{{ end }}</span>
+          </a>
+        </div>
+
+        <p><a href="{{ if eq site.Language.Lang "en" }}/en/privacy/{{ else }}/privacy/{{ end }}">{{ if eq site.Language.Lang "en" }}Privacy Policy (Zero Cookies){{ else }}Informativa Privacy (Zero Cookie){{ end }}</a></p>
+        <p class="copyright">&copy; {{ now.Format "2006" }} {{ site.Title }} &bull; Via Pertossi 12, Arona (NO)</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

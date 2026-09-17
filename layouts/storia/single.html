@@ -1,0 +1,43 @@
+{{ define "main" }}
+<article class="page-single container">
+  <header class="page-header">
+    <div class="article-meta">
+      <span class="tag-badge" style="background: var(--color-giallo-soft); color: var(--color-bordeaux); border-color: var(--color-giallo-portico);">Monografia Storica</span>
+    </div>
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{ with .Params.description }}
+      <p class="page-lead">{{ . }}</p>
+    {{ end }}
+  </header>
+
+  <!-- Corpo del testo storico con immagini d'archivio -->
+  <div class="article-body">
+    {{ .Content }}
+  </div>
+
+  <!-- Galleria dei Dettagli Architettonici & Scorci Storici -->
+  {{ with .Params.gallery }}
+    <section class="article-gallery-section reveal">
+      <h2 class="gallery-title">{{ if eq site.Language.Lang "en" }}Architectural Details & Historical Views{{ else }}Documenti & Scorci della Dimora{{ end }}</h2>
+      <div class="article-gallery-grid reveal-stagger">
+        {{ range . }}
+          {{ $imgSrc := .src }}
+          {{ if not (hasPrefix $imgSrc "/") }}{{ $imgSrc = printf "/storia/%s" $imgSrc }}{{ end }}
+          <figure class="gallery-card">
+            <a href="{{ $imgSrc }}" target="_blank" rel="noopener">
+              <img src="{{ $imgSrc }}" alt="{{ .alt | default .title }}" loading="lazy">
+            </a>
+            {{ with .title }}
+              <figcaption>{{ . }}</figcaption>
+            {{ end }}
+          </figure>
+        {{ end }}
+      </div>
+    </section>
+  {{ end }}
+
+  <footer class="article-footer">
+    <a href="/" class="btn-back">&larr; Torna alla pagina iniziale</a>
+  </footer>
+</article>
+{{ end }}

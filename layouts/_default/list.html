@@ -1,0 +1,28 @@
+{{ define "main" }}
+<section class="list-section container">
+  <header class="page-header">
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{ with .Params.description }}
+      <p class="page-lead">{{ . }}</p>
+    {{ end }}
+  </header>
+
+  <div class="news-grid">
+    {{ range .Pages.ByDate.Reverse }}
+      <article class="news-card">
+        {{ with .Params.featured_image }}
+          <a href="{{ $.RelPermalink }}" class="card-thumb-link">
+            <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
+          </a>
+        {{ end }}
+        <div class="card-content">
+          <time>{{ .Date | time.Format ":date_long" }}</time>
+          <h2 class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          <p class="card-excerpt">{{ .Description }}</p>
+          <a href="{{ .RelPermalink }}" class="card-link">Leggi &rarr;</a>
+        </div>
+      </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

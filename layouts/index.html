@@ -1,0 +1,153 @@
+{{ define "main" }}
+<!-- Hero Section Cinematica con foto autentica del giardino -->
+<section class="hero-section">
+  <div class="hero-media">
+    <picture>
+      <source srcset="/images/hero.webp" type="image/webp">
+      <img src="/images/hero.jpg" alt="Casa Usellini - Il giardino storico e le Casacce" class="hero-bg-img" loading="eager" fetchpriority="high">
+    </picture>
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <span class="hero-badge">{{ if eq site.Language.Lang "en" }}Historic 18th-Century Residence &bull; Arona{{ else }}Dimora Storica del '700 &bull; Arona{{ end }}</span>
+    <h1 class="hero-title">{{ site.Title }}</h1>
+    <p class="hero-subtitle">
+      {{ if eq site.Language.Lang "en" }}
+      Historic 18th-century residence in the heart of Arona, on Lake Maggiore. An architectural heritage of porticos, secular gardens, and classical music.
+      {{ else }}
+      Dimora storica del Settecento nel cuore di Arona, sul Lago Maggiore. Un patrimonio di portici, giardini secolari e grande musica.
+      {{ end }}
+    </p>
+    <div class="hero-actions">
+      <a href="#prossimi-eventi" class="btn btn-primary">{{ if eq site.Language.Lang "en" }}Upcoming Events &darr;{{ else }}Prossimi Appuntamenti &darr;{{ end }}</a>
+      <a href="{{ if eq site.Language.Lang "en" }}/en/storia/{{ else }}/storia/{{ end }}" class="btn btn-secondary">{{ if eq site.Language.Lang "en" }}History of the Palace &rarr;{{ else }}Storia della Casa &rarr;{{ end }}</a>
+    </div>
+  </div>
+</section>
+
+<!-- Calendario Dinamico dei Prossimi Eventi & Concerti -->
+<section id="prossimi-eventi" class="section-spacer container reveal">
+  <div class="section-header-flex">
+    <div>
+      <h2 class="section-title">{{ if eq site.Language.Lang "en" }}Events & Concerts Calendar{{ else }}Calendario Eventi & Concerti{{ end }}</h2>
+      <p class="section-subtitle">{{ if eq site.Language.Lang "en" }}Live classical concerts and cultural performances in the garden of Casa Usellini{{ else }}Gli appuntamenti musicali e culturali dal vivo nel giardino di Casa Usellini{{ end }}</p>
+    </div>
+    <a href="{{ if eq site.Language.Lang "en" }}/en/news/{{ else }}/news/{{ end }}" class="btn btn-secondary">{{ if eq site.Language.Lang "en" }}Historical archive &rarr;{{ else }}Archivio storico &rarr;{{ end }}</a>
+  </div>
+
+  <div class="events-calendar-container">
+    <!-- Barra di stato dinamica (calcolata via JS in base alla data odierna) -->
+    <div class="calendar-status-bar"></div>
+
+    {{ $allEvents := slice }}
+    {{ $newsPages := where site.RegularPages "Section" "news" }}
+    {{ if eq (len $newsPages) 0 }}
+      {{ $defaultSite := index hugo.Sites 0 }}
+      {{ $newsPages = where $defaultSite.RegularPages "Section" "news" }}
+    {{ end }}
+    {{ range $newsPages }}
+      {{ $postUrl := .RelPermalink }}
+      {{ with .Params.events }}
+        {{ range . }}
+          {{ $eventDate := time.AsTime .date }}
+          {{ $allEvents = $allEvents | append (dict 
+              "date" .date 
+              "time" (.time | default "21:00") 
+              "dateTime" $eventDate
+              "year" ($eventDate.Format "2006")
+              "title" .title 
+              "festival" (.festival | default "Palazzo Usellini") 
+              "url" $postUrl
+          ) }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+
+    {{/* Ordina tutti gli eventi in ordine cronologico decrescente */}}
+    {{ $sortedEvents := sort $allEvents "date" "desc" }}
+
+    {{/* Estrae tutti gli anni unici presenti per il filtro */}}
+    {{ $years := slice }}
+    {{ range $sortedEvents }}
+      {{ if not (in $years .year) }}
+        {{ $years = $years | append .year }}
+      {{ end }}
+    {{ end }}
+
+    <!-- Selettore per Stagione / Anno Storico -->
+    <div class="calendar-year-filters" role="tablist" aria-label="Seleziona la stagione degli eventi">
+      <span class="filter-label">{{ if eq site.Language.Lang "en" }}Historical editions:{{ else }}Edizioni storiche:{{ end }}</span>
+      <button type="button" class="year-filter-btn is-active" data-year="current">{{ if eq site.Language.Lang "en" }}2026 Season{{ else }}Stagione 2026{{ end }}</button>
+      {{ range $years }}
+        {{ if ne . "2026" }}
+          <button type="button" class="year-filter-btn" data-year="{{ . }}">{{ . }}</button>
+        {{ end }}
+      {{ end }}
+      <button type="button" class="year-filter-btn" data-year="all">{{ if eq site.Language.Lang "en" }}All editions{{ else }}Tutte le edizioni{{ end }}</button>
+    </div>
+
+    <!-- Lista Unificata Card Calendario -->
+    <div class="calendar-events-list">
+      <!-- Sezione Eventi Futuri (In Programma) -->
+      <div class="calendar-subgroup calendar-upcoming-group"></div>
+
+      <!-- Separatore Fisico Nobile tra Eventi Futuri ed Eventi Passati -->
+      <div class="calendar-events-divider" style="display: none;">
+        <span class="divider-line"></span>
+        <span class="divider-label">✦ {{ if eq site.Language.Lang "en" }}Past Events & Historical Programme{{ else }}Appuntamenti Conclusi della Stagione{{ end }} ✦</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <!-- Sezione Eventi Conclusi (Trascorsi) -->
+      <div class="calendar-subgroup calendar-past-group">
+        {{ range $sortedEvents }}
+          <article class="calendar-event-card" data-event-date="{{ .date }}" data-event-year="{{ .year }}">
+            <div class="event-date-block">
+              <span class="event-badge-month">{{ .dateTime | time.Format "Jan" }}</span>
+              <span class="event-badge-day">{{ .dateTime | time.Format "02" }}</span>
+              <span class="event-badge-year">{{ .dateTime | time.Format "2006" }}</span>
+            </div>
+
+            <div class="event-card-body">
+              <div class="event-meta-line">
+                <span class="event-meta-time">🕒 Ore {{ .time }}</span>
+                <span class="event-meta-tag">{{ .festival }}</span>
+                <span class="event-meta-year">{{ if eq site.Language.Lang "en" }}Edition {{ .year }}{{ else }}Edizione {{ .year }}{{ end }}</span>
+              </div>
+              <h3 class="event-card-title">{{ .title }}</h3>
+              <p class="event-card-location">📍 Giardino di Casa Usellini, Via Pertossi 12 - Arona</p>
+            </div>
+
+            <div class="event-card-action">
+              <a href="{{ .url }}" class="btn btn-secondary btn-sm">{{ if eq site.Language.Lang "en" }}Details &rarr;{{ else }}Dettagli &rarr;{{ end }}</a>
+            </div>
+          </article>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Presentazione & Dettagli della Dimora Storica -->
+<section class="section-spacer container reveal">
+  <div class="intro-grid">
+    <div class="intro-text-box">
+      <h2>{{ if eq site.Language.Lang "en" }}Casa Usellini in Arona{{ else }}Casa Usellini ad Arona{{ end }}</h2>
+      <p>{{ if eq site.Language.Lang "en" }}Palazzo Usellini stands in the historic pedestrian center of Arona along via Pertossi, the ancient carriage way that led down towards the harbor and today's Piazza del Popolo.{{ else }}Palazzo Usellini si trova nel centro storico di Arona, lungo via Pertossi, l’antica via carrale che scendeva verso il porto e l'attuale Piazza del Popolo.{{ end }}</p>
+      <p>{{ if eq site.Language.Lang "en" }}The present architectural ensemble dates back to the late 18th century (1783), created by Carlantonio Usellini upon returning from commerce in the Netherlands, built over the earlier 16th-century core from 1530 and adjoining the Church of Santa Marta.{{ else }}Il complesso architettonico attuale risale alla fine del Settecento (1783), opera voluta da Carlantonio Usellini dopo il suo ritorno dai commerci nei Paesi Bassi, innestata sull'antico nucleo cinquecentesco del 1530 e comunicante con la Chiesa di Santa Marta.{{ end }}</p>
+      <div style="margin-top: 1.5rem;">
+        <a href="{{ if eq site.Language.Lang "en" }}/en/storia/{{ else }}/storia/{{ end }}" class="btn btn-secondary">{{ if eq site.Language.Lang "en" }}Read full history &rarr;{{ else }}Leggi la monografia storica completa &rarr;{{ end }}</a>
+      </div>
+    </div>
+
+    <div class="intro-card-callout">
+      <h3>{{ if eq site.Language.Lang "en" }}Art, Music & Heritage{{ else }}Arte, Musica e Memoria{{ end }}</h3>
+      <p>{{ if eq site.Language.Lang "en" }}During the summer season, Casa Usellini opens its gates to host prestigious classical chamber concerts and open-air theatrical performances in the internal garden.{{ else }}Nei mesi estivi, Casa Usellini accoglie prestigiosi appuntamenti cameristici e rassegne teatrali all'aperto nella cornice del giardino interno.{{ end }}</p>
+      <p>{{ if eq site.Language.Lang "en" }}The palace preserves the memory of celebrated painter <strong>Gianfilippo Usellini</strong> (1904–1971), whose frescoes and metaphysical canvases drew continuous inspiration from the halls and porticos of his family home.{{ else }}La dimora custodisce la memoria del celebre pittore <strong>Gianfilippo Usellini</strong> (1904-1971), le cui opere e affreschi traggono continua ispirazione dalle sale, dai portici e dalle prospettive del palazzo di famiglia.{{ end }}</p>
+      <div style="margin-top: 1.2rem;">
+        <a href="{{ if eq site.Language.Lang "en" }}/en/contatti/{{ else }}/contatti/{{ end }}" class="card-link" style="color: var(--color-verde);">{{ if eq site.Language.Lang "en" }}Reaching Casa Usellini on foot from Arona centre &rarr;{{ else }}Raggiungere Casa Usellini a piedi dal centro &rarr;{{ end }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

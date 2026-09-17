@@ -1,0 +1,33 @@
+{{ define "main" }}
+<section class="gallery-page container">
+  <header class="page-header">
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{ with .Params.description }}
+      <p class="page-lead">{{ . }}</p>
+    {{ end }}
+  </header>
+
+  {{ with .Content }}
+    <div class="gallery-intro-text">
+      {{ . }}
+    </div>
+  {{ end }}
+
+  {{ with .Params.gallery }}
+    <div class="photo-gallery-masonry reveal-stagger">
+      {{ range . }}
+        {{ $imgSrc := .src }}
+        {{ if not (hasPrefix $imgSrc "/") }}{{ $imgSrc = printf "/galleria/%s" $imgSrc }}{{ end }}
+        <figure class="photo-gallery-item">
+          <a href="{{ $imgSrc }}" target="_blank" rel="noopener">
+            <img src="{{ $imgSrc }}" alt="{{ .alt | default .title }}" loading="lazy">
+          </a>
+          {{ with .title }}
+            <figcaption>{{ . }}</figcaption>
+          {{ end }}
+        </figure>
+      {{ end }}
+    </div>
+  {{ end }}
+</section>
+{{ end }}

@@ -1,0 +1,63 @@
+{{ define "main" }}
+<article class="article-single container">
+  <!-- Intestazione dell'articolo -->
+  <header class="article-header">
+    <div class="article-meta">
+      <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+        {{ .Date | time.Format ":date_long" }}
+      </time>
+      {{ with .Params.tags }}
+        <div class="article-tags">
+          {{ range . }}
+            <span class="tag-badge">{{ . }}</span>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+
+    <h1 class="article-title">{{ .Title }}</h1>
+  </header>
+
+  <!-- Immagine di copertina in evidenza (se presente) -->
+  {{ with .Params.featured_image }}
+    {{ $res := $.Resources.GetMatch . }}
+    <figure class="article-hero-image">
+      <img src="{{ if $res }}{{ $res.RelPermalink }}{{ else }}{{ . }}{{ end }}" alt="{{ $.Title }}">
+    </figure>
+  {{ end }}
+
+  <!-- Corpo del testo dell'articolo in Markdown -->
+  <div class="article-body">
+    {{ .Content }}
+  </div>
+
+  <!-- Sezione Galleria Immagini (se presente nell'articolo) -->
+  {{ with .Params.gallery }}
+    <section class="article-gallery-section">
+      <h2 class="gallery-title">{{ if eq site.Language.Lang "en" }}Photo Gallery{{ else }}Galleria fotografica{{ end }}</h2>
+      <div class="article-gallery-grid reveal-stagger">
+        {{ range . }}
+          {{ $imgSrc := .src }}
+          {{ $res := $.Resources.GetMatch .src }}
+          {{ if $res }}
+            {{ $imgSrc = $res.RelPermalink }}
+          {{ end }}
+          <figure class="gallery-card">
+            <a href="{{ $imgSrc }}" target="_blank" rel="noopener">
+              <img src="{{ $imgSrc }}" alt="{{ .alt | default .title }}" loading="lazy">
+            </a>
+            {{ with .title }}
+              <figcaption>{{ . }}</figcaption>
+            {{ end }}
+          </figure>
+        {{ end }}
+      </div>
+    </section>
+  {{ end }}
+
+  <!-- Piede dell'articolo e navigazione indietro -->
+  <footer class="article-footer">
+    <a href="{{ if eq site.Language.Lang "en" }}/en/news/{{ else }}/news/{{ end }}" class="btn-back">&larr; {{ if eq site.Language.Lang "en" }}Back to all news and events{{ else }}Torna a tutti gli eventi e news{{ end }}</a>
+  </footer>
+</article>
+{{ end }}

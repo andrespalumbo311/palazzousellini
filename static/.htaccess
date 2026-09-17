@@ -1,0 +1,37 @@
+# ==============================================================================
+# Palazzo Usellini - Hetzner Web Hosting Configuration (.htaccess)
+# ==============================================================================
+
+# Caratteri e Codifica Predefinita
+AddDefaultCharset UTF-8
+
+# Compressione Gzip / Deflate per Massime Prestazioni
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Caching Statico per Browser
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+# Servizio Intelligente della Lingua:
+# Default INGLESE (/en/) per tutti i visitatori internazionali;
+# Serve ITALIANO (/) solo se la lingua del browser è esplicitamente italiano (Accept-Language: it...)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Se si accede alla radice "/" senza cookie esplicito per l'italiano,
+  # e la lingua del browser NON è italiano -> reindirizza all'inglese /en/
+  RewriteCond %{REQUEST_URI} ^/?$
+  RewriteCond %{HTTP_COOKIE} !palazzo_usellini_lang=it [NC]
+  RewriteCond %{HTTP:Accept-Language} !^it [NC]
+  RewriteRule ^$ /en/ [R=302,L]
+</IfModule>

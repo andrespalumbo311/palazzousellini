@@ -1,0 +1,38 @@
+{{ define "main" }}
+<article class="page-single container">
+  <header class="page-header">
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{ with .Params.description }}
+      <p class="page-lead">{{ . }}</p>
+    {{ end }}
+  </header>
+
+  {{ with .Params.featured_image }}
+    <figure class="page-hero-image">
+      <img src="{{ . }}" alt="{{ $.Title }}">
+    </figure>
+  {{ end }}
+
+  <div class="page-body">
+    {{ .Content }}
+  </div>
+
+  {{ with .Params.gallery }}
+    <section class="page-gallery-section">
+      <h2>Immagini storiche</h2>
+      <div class="article-gallery-grid">
+        {{ range . }}
+          <figure class="gallery-card">
+            <a href="{{ .src }}" target="_blank" rel="noopener">
+              <img src="{{ .src }}" alt="{{ .alt | default .title }}" loading="lazy">
+            </a>
+            {{ with .title }}
+              <figcaption>{{ . }}</figcaption>
+            {{ end }}
+          </figure>
+        {{ end }}
+      </div>
+    </section>
+  {{ end }}
+</article>
+{{ end }}

@@ -1,0 +1,68 @@
+baseURL = 'https://palazzousellini.com/'
+defaultContentLanguage = 'it'
+
+[languages]
+  [languages.it]
+    locale = 'it-IT'
+    label = 'IT'
+    weight = 1
+    title = 'Palazzo Usellini'
+    [languages.it.params]
+      description = 'Dimora storica del Settecento ad Arona sul Lago Maggiore. Sede di concerti, eventi culturali e mostre.'
+      address = 'Via Pertossi 12, 28041 Arona (NO)'
+    [[languages.it.menu.main]]
+      name = 'Home'
+      url = '/'
+      weight = 1
+    [[languages.it.menu.main]]
+      name = 'Storia'
+      url = '/storia/'
+      weight = 2
+    [[languages.it.menu.main]]
+      name = 'Galleria'
+      url = '/galleria/'
+      weight = 3
+    [[languages.it.menu.main]]
+      name = 'News & Eventi'
+      url = '/news/'
+      weight = 4
+    [[languages.it.menu.main]]
+      name = 'Contatti'
+      url = '/contatti/'
+      weight = 5
+
+  [languages.en]
+    locale = 'en-US'
+    label = 'EN'
+    weight = 2
+    title = 'Palazzo Usellini'
+    [languages.en.params]
+      description = 'Historic 18th-century palace in Arona on Lake Maggiore. Venue for classical concerts, cultural events, and art exhibitions.'
+      address = 'Via Pertossi 12, 28041 Arona (NO), Italy'
+    [[languages.en.menu.main]]
+      name = 'Home'
+      url = '/en/'
+      weight = 1
+    [[languages.en.menu.main]]
+      name = 'History'
+      url = '/en/storia/'
+      weight = 2
+    [[languages.en.menu.main]]
+      name = 'Gallery'
+      url = '/en/galleria/'
+      weight = 3
+    [[languages.en.menu.main]]
+      name = 'News & Events'
+      url = '/en/news/'
+      weight = 4
+    [[languages.en.menu.main]]
+      name = 'Contact'
+      url = '/en/contatti/'
+      weight = 5
+
+[imaging]
+  resampleFilter = 'lanczos'
+  [imaging.jpeg]
+    quality = 85
+  [imaging.webp]
+    quality = 85

@@ -1,0 +1,41 @@
+{{ define "main" }}
+<section class="page-single container">
+  <header class="page-header">
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{ with .Params.description }}
+      <p class="page-lead">{{ . }}</p>
+    {{ end }}
+  </header>
+
+  <div class="contacts-grid">
+    <!-- Scheda Recapiti e Indicazioni -->
+    <div class="contacts-info-card">
+      <div class="contacts-item">
+        <h4>📍 {{ if eq site.Language.Lang "en" }}Address{{ else }}Indirizzo{{ end }}</h4>
+        <p>Via Pertossi 12<br>28041 Arona (NO), Lago Maggiore - Italia</p>
+      </div>
+
+      <div class="contacts-item">
+        <h4>✉️ {{ if eq site.Language.Lang "en" }}Email{{ else }}Posta Elettronica{{ end }}</h4>
+        <p><a href="mailto:info@palazzousellini.com">info@palazzousellini.com</a></p>
+      </div>
+
+      <div class="contacts-item" style="margin-bottom: 0;">
+        <h4>🚶 {{ if eq site.Language.Lang "en" }}Directions & Access{{ else }}Indicazioni e Accesso{{ end }}</h4>
+        <p>{{ if eq site.Language.Lang "en" }}Casa Usellini is situated in the pedestrian historic centre of Arona, a short walk from Piazza del Popolo and the lakeside promenade. It is accessible on foot from Arona railway station in approximately 7 minutes.{{ else }}Casa Usellini si trova nel centro storico pedonale di Arona, a pochi passi da Piazza del Popolo e dal lungolago. È raggiungibile a piedi dalla stazione ferroviaria di Arona in circa 7 minuti.{{ end }}</p>
+      </div>
+    </div>
+
+    <!-- Mappa Nativa OpenStreetMap Leaflet (Zero Cookie, Privacy GDPR) + Link Rapido Google Maps -->
+    <div class="map-container">
+      <div id="osm-map" class="osm-map-viewport" role="region" aria-label="Mappa di Palazzo Usellini ad Arona"></div>
+      <div class="map-actions">
+        <p>{{ if eq site.Language.Lang "en" }}Interactive map powered by <strong>OpenStreetMap</strong> (zero tracking cookies).{{ else }}Mappa interattiva su base <strong>OpenStreetMap</strong> (nessun cookie di tracciamento).{{ end }}</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=45.762615,8.559467" target="_blank" rel="noopener noreferrer" class="btn btn-external">
+          {{ if eq site.Language.Lang "en" }}Open in Google Maps &nearr;{{ else }}Visualizza su Google Maps &nearr;{{ end }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

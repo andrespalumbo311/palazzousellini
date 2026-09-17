@@ -1,0 +1,52 @@
+{{ define "main" }}
+<section class="news-list-section container">
+  <header class="section-header">
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{ with .Params.description }}
+      <p class="page-lead">{{ . }}</p>
+    {{ end }}
+  </header>
+
+  <div class="news-grid reveal-stagger">
+    {{ $posts := .Pages.ByDate.Reverse }}
+    {{ if eq (len $posts) 0 }}
+      {{ $defaultSite := index hugo.Sites 0 }}
+      {{ $posts = (where $defaultSite.RegularPages "Section" "news").ByDate.Reverse }}
+    {{ end }}
+    {{ range $posts }}
+      {{ $post := . }}
+      {{ $imgSrc := "" }}
+      {{ with .Params.featured_image }}
+        {{ $res := $post.Resources.GetMatch . }}
+        {{ if $res }}
+          {{ $imgSrc = $res.RelPermalink }}
+        {{ else }}
+          {{ $imgSrc = (printf "%s%s" $post.RelPermalink .) }}
+        {{ end }}
+      {{ else }}
+        {{ $imgSrc = "/images/hero.jpg" }}
+      {{ end }}
+      <article class="news-card">
+        <a href="{{ $post.RelPermalink }}" class="card-thumb-link">
+          <img src="{{ $imgSrc }}" alt="{{ $post.Title }}" loading="lazy">
+        </a>
+        <div class="card-content">
+          <div class="card-meta">
+            <time datetime="{{ $post.Date.Format "2006-01-02" }}">{{ $post.Date | time.Format ":date_long" }}</time>
+            {{ with $post.Params.tags }}
+              <span class="card-tag">{{ index . 0 }}</span>
+            {{ end }}
+          </div>
+          <h2 class="card-title">
+            <a href="{{ $post.RelPermalink }}">{{ $post.Title }}</a>
+          </h2>
+          <p class="card-excerpt">
+            {{ $post.Description }}
+          </p>
+          <a href="{{ $post.RelPermalink }}" class="card-link">{{ if eq site.Language.Lang "en" }}Discover more &rarr;{{ else }}Scopri di più &rarr;{{ end }}</a>
+        </div>
+      </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
