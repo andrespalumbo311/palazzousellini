@@ -1591,15 +1591,42 @@ p {
     width: 100%;
   }
 
-  /* Vista Mobile Calibrata per la Hero */
+  /* Vista Mobile — Hero con pulsanti sotto l'immagine */
   .hero-section {
-    min-height: 100vh;
-    min-height: 100dvh;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
   }
 
   .hero-content {
-    padding: 2.5rem 1rem;
+    position: relative;
+    z-index: 2;
+    min-height: 75vh;
+    min-height: 75dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem 2rem;
   }
+
+  .hero-actions {
+    position: relative;
+    z-index: 2;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    padding: 1.5rem 5%;
+    background-color: rgba(26, 24, 22, 0.97);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
 
   .hero-title {
     font-size: 2.3rem;
@@ -1685,14 +1712,10 @@ p {
     width: 92%;
   }
 
-  .hero-section {
-    min-height: 100vh;
-    min-height: 100dvh;
-    margin-bottom: 0;
-  }
-
   .hero-content {
-    padding: 2rem 0.5rem;
+    min-height: 65vh;
+    min-height: 65dvh;
+    padding: 3rem 0.8rem 1.5rem;
   }
 
   .hero-badge {
@@ -1709,16 +1732,6 @@ p {
     font-size: 1rem;
     line-height: 1.5;
     margin-bottom: 1.4rem;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .hero-actions .btn {
-    width: 100%;
-    justify-content: center;
   }
 
   .calendar-event-card {
