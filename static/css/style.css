@@ -248,14 +248,15 @@ p {
    ========================================================================== */
 .hero-section {
   position: relative;
-  min-height: 80vh;
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
   text-align: center;
   overflow: hidden;
-  margin-bottom: 3.5rem;
+  margin-bottom: 0;
   background-color: #1a1816;
 }
 
@@ -1592,7 +1593,8 @@ p {
 
   /* Vista Mobile Calibrata per la Hero */
   .hero-section {
-    min-height: 60vh;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   .hero-content {
@@ -1684,8 +1686,9 @@ p {
   }
 
   .hero-section {
-    min-height: 52vh;
-    margin-bottom: 2.2rem;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin-bottom: 0;
   }
 
   .hero-content {
