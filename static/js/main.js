@@ -72,6 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof L !== 'undefined') initLeafletMap();
     });
   }
+
+  // 8. Selettore Tema Scuro / Chiaro
+  initThemeToggle();
 });
 
 function initLeafletMap() {
@@ -403,4 +406,53 @@ function initLightbox() {
       }
     }
   }, { passive: true });
+}
+
+function initThemeToggle() {
+  const toggleBtn = document.getElementById('theme-toggle');
+  if (!toggleBtn) return;
+
+  const storageKey = 'palazzo_usellini_theme';
+  const labelEl = toggleBtn.querySelector('.theme-toggle-label');
+  const isEnglish = document.documentElement.lang && document.documentElement.lang.startsWith('en');
+
+  const updateUI = (isDark) => {
+    if (labelEl) {
+      if (isEnglish) {
+        labelEl.textContent = isDark ? 'Theme: Dark' : 'Theme: Light';
+      } else {
+        labelEl.textContent = isDark ? 'Tema: Scuro' : 'Tema: Chiaro';
+      }
+    }
+    toggleBtn.setAttribute('aria-pressed', isDark);
+  };
+
+  const getEffectiveTheme = () => {
+    const attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'dark') return 'dark';
+    if (attr === 'light') return 'light';
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+
+  updateUI(getEffectiveTheme() === 'dark');
+
+  toggleBtn.addEventListener('click', () => {
+    const current = getEffectiveTheme();
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem(storageKey, next);
+    } catch (e) {}
+    updateUI(next === 'dark');
+  });
+
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      try {
+        if (!localStorage.getItem(storageKey)) {
+          updateUI(e.matches);
+        }
+      } catch (err) {}
+    });
+  }
 }

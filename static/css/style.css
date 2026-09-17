@@ -29,6 +29,9 @@
   --color-text-muted: #66625D;
   --color-border: #E8E2D8;
 
+  --color-header-bg: rgba(253, 252, 248, 0.98);
+  --color-header-scrolled: rgba(253, 252, 248, 0.90);
+
   --max-w: 1140px;
   --radius-sm: 6px;
   --radius: 10px;
@@ -37,6 +40,54 @@
   --shadow-md: 0 6px 20px rgba(32, 31, 30, 0.07);
   --shadow-lg: 0 14px 35px rgba(32, 31, 30, 0.12);
   --transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Dark Mode — Tavolozza Nobile per Palazzo Usellini
+   Supporto automatico da sistema (prefers-color-scheme) e override manuale
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #151312;
+    --color-surface: #201D1B;
+    --color-text: #F2EDE4;
+    --color-text-muted: #A39B90;
+    --color-border: #38322C;
+
+    /* Calibrazione ottica del Bordeaux per sfondo scuro:
+       il bordeaux originale #74242B diventa rubino nobile chiarificato #E57D86 (contrasto > 8.5:1) */
+    --color-bordeaux: #E57D86;
+    --color-bordeaux-dark: #F3A4AC;
+    --color-verde: #5EA898;
+    --color-verde-light: #7EBEB0;
+    --color-giallo-portico: #E5BC58;
+    --color-giallo-soft: #282216;
+    --color-azzurro-facciata: #1E2529;
+    --color-azzurro-border: #36484D;
+
+    --color-header-bg: rgba(21, 19, 18, 0.96);
+    --color-header-scrolled: rgba(21, 19, 18, 0.90);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #151312;
+  --color-surface: #201D1B;
+  --color-text: #F2EDE4;
+  --color-text-muted: #A39B90;
+  --color-border: #38322C;
+
+  --color-bordeaux: #E57D86;
+  --color-bordeaux-dark: #F3A4AC;
+  --color-verde: #5EA898;
+  --color-verde-light: #7EBEB0;
+  --color-giallo-portico: #E5BC58;
+  --color-giallo-soft: #282216;
+  --color-azzurro-facciata: #1E2529;
+  --color-azzurro-border: #36484D;
+
+  --color-header-bg: rgba(21, 19, 18, 0.96);
+  --color-header-scrolled: rgba(21, 19, 18, 0.90);
 }
 
 /* Reset & Base */
@@ -107,7 +158,7 @@ p {
    Header & Navigazione
    ========================================================================== */
 .site-header {
-  background: rgba(253, 252, 248, 0.98);
+  background: var(--color-header-bg);
   border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
@@ -119,7 +170,7 @@ p {
 }
 
 .site-header.is-scrolled {
-  background: rgba(253, 252, 248, 0.90);
+  background: var(--color-header-scrolled);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
@@ -1532,9 +1583,161 @@ p {
 }
 
 .copyright {
-  margin-top: 1.2rem;
-  font-size: 0.85rem;
-  color: #88837a;
+  font-size: 0.88rem;
+  color: #a39b90;
+}
+
+.footer-bottom-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 1.6rem;
+  margin-top: 1.5rem;
+}
+
+.footer-bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #e5e0d8;
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--color-giallo-portico);
+  color: var(--color-giallo-portico);
+  transform: translateY(-1px);
+}
+
+.theme-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Icone Luna / Sole nel toggle:
+   In tema chiaro mostra la Luna (invito a passare alla Dark Mode);
+   In tema scuro mostra il Sole (invito a passare alla Light Mode). */
+.theme-toggle-btn .icon-sun {
+  display: none;
+}
+.theme-toggle-btn .icon-moon {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle-btn .icon-sun {
+    display: block;
+  }
+  :root:not([data-theme="light"]) .theme-toggle-btn .icon-moon {
+    display: none;
+  }
+}
+:root[data-theme="dark"] .theme-toggle-btn .icon-sun {
+  display: block;
+}
+:root[data-theme="dark"] .theme-toggle-btn .icon-moon {
+  display: none;
+}
+
+/* Regole di resa Dark Mode per elementi e componenti specifici */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .site-logo {
+    filter: brightness(0) invert(0.92);
+  }
+  :root:not([data-theme="light"]) .btn-primary,
+  :root:not([data-theme="light"]) .year-filter-btn.is-active {
+    background: #8F242C;
+    color: #ffffff !important;
+    border-color: #B23D47;
+  }
+  :root:not([data-theme="light"]) .btn-primary:hover {
+    background: #A63039;
+    border-color: #C94F5A;
+  }
+  :root:not([data-theme="light"]) .calendar-event-card {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+  }
+  :root:not([data-theme="light"]) .calendar-event-card:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+    border-color: var(--color-bordeaux);
+  }
+  :root:not([data-theme="light"]) .event-date-block {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--color-border);
+  }
+  :root:not([data-theme="light"]) .hero-actions-mobile {
+    background-color: var(--color-bg);
+  }
+  :root:not([data-theme="light"]) .intro-card-callout {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+  }
+  :root:not([data-theme="light"]) .calendar-status-bar {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+  }
+  :root:not([data-theme="light"]) .article-card {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+  }
+}
+
+:root[data-theme="dark"] .site-logo {
+  filter: brightness(0) invert(0.92);
+}
+:root[data-theme="dark"] .btn-primary,
+:root[data-theme="dark"] .year-filter-btn.is-active {
+  background: #8F242C;
+  color: #ffffff !important;
+  border-color: #B23D47;
+}
+:root[data-theme="dark"] .btn-primary:hover {
+  background: #A63039;
+  border-color: #C94F5A;
+}
+:root[data-theme="dark"] .calendar-event-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+:root[data-theme="dark"] .calendar-event-card:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  border-color: var(--color-bordeaux);
+}
+:root[data-theme="dark"] .event-date-block {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--color-border);
+}
+:root[data-theme="dark"] .hero-actions-mobile {
+  background-color: var(--color-bg);
+}
+:root[data-theme="dark"] .intro-card-callout {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+:root[data-theme="dark"] .calendar-status-bar {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+:root[data-theme="dark"] .article-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
 }
 
 /* ==========================================================================
@@ -1566,7 +1769,7 @@ p {
     top: 100%;
     left: 0;
     width: 100%;
-    background: rgba(253, 252, 248, 0.98);
+    background: var(--color-header-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 3px solid var(--color-giallo-portico);

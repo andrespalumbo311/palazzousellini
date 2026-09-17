@@ -92,7 +92,16 @@
 - **Root Cause**: Forcing interactive buttons inside the same absolute-positioned media container across both desktop and mobile viewports causes visual overlap and clutter on tall vertical mobile screens. Simultaneously, eliminating section top margins without dedicated section anchor padding causes below-the-fold titles (e.g. event calendars) to collide visually with the hero edge or get obscured beneath sticky headers upon in-page anchor navigation.
 - **Prevention Patterns**:
   - Structurally separate the visual media wrapper (`.hero-visual`) from responsive action bars (`.hero-actions-mobile`), rendering desktop CTAs overlaid inside the media and mobile CTAs cleanly below the photograph in normal document flow.
-  - Implement explicit `scroll-margin-top` alongside generous `padding-top` on anchor targets (`#prossimi-eventi`) to preserve breathing room and prevent sticky header clipping.
+---
+
+### [Theme Architecture & Contrast Calibration] Chromatic Inversion in Dark Mode vs. Authentic Historic Palettes
+- **Context**: Introducing dark mode styling to historic or heritage brand identities where core identity colors are inherently dark (such as 18th-century noble bordeaux `#74242B` derived from courtyard portico shutters).
+- **Root Cause**: Inverting background surfaces to dark charcoal/ebony while preserving deep brand colors causes textual contrast to collapse from >9:1 (light background) to an unreadable 1.8:1 (dark background), violating WCAG AAA standards. Furthermore, sharing a single color token across both text headings and solid interactive button fills causes buttons to wash out if the token is globally brightened.
+- **Prevention Patterns**:
+  - Perform tonal elevation for typography: elevate deep heritage shades to their luminous, antique equivalents (e.g. `#E57D86` antique ruby) for headings and text accents to maintain contrast >8.5:1 on dark surfaces.
+  - Decouple interactive button fills: preserve deep, saturated bordeaux fills (`#8F242C`) with crisp white typography for primary CTAs so buttons retain authority and tactile contrast.
+  - Implement a zero-FOUC (Flash of Unstyled Content) synchronous bootstrap in `<head>` alongside dual-layer CSS cascade (supporting both system `prefers-color-scheme` and persistent `data-theme` manual overrides).
+
 
 
 
