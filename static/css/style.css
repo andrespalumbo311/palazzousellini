@@ -248,6 +248,11 @@ p {
    ========================================================================== */
 .hero-section {
   position: relative;
+  width: 100%;
+}
+
+.hero-visual {
+  position: relative;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
@@ -256,7 +261,6 @@ p {
   color: #ffffff;
   text-align: center;
   overflow: hidden;
-  margin-bottom: 0;
   background-color: #1a1816;
 }
 
@@ -302,7 +306,7 @@ p {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, rgba(15, 12, 12, 0.15) 0%, rgba(15, 12, 12, 0.38) 100%);
+  background: linear-gradient(180deg, rgba(15, 12, 12, 0.15) 0%, rgba(15, 12, 12, 0.42) 100%);
 }
 
 .hero-content {
@@ -310,6 +314,7 @@ p {
   z-index: 2;
   padding: 3.5rem 1rem;
   max-width: 860px;
+  margin: 0 auto;
 }
 
 .hero-badge {
@@ -351,6 +356,20 @@ p {
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.hero-actions-desktop {
+  display: flex;
+}
+
+.hero-actions-mobile {
+  display: none;
+}
+
+/* Spaziatura nobile per la sezione calendario ed eventi */
+#prossimi-eventi {
+  padding-top: 5rem;
+  scroll-margin-top: 5.5rem;
 }
 
 /* Bottoni */
@@ -1591,50 +1610,55 @@ p {
     width: 100%;
   }
 
-  /* Vista Mobile — Hero con pulsanti sotto l'immagine */
-  .hero-section {
-    min-height: auto;
+  /* Vista Mobile — Hero visual proporzionata, pulsanti fisicamente sotto */
+  .hero-actions-desktop {
+    display: none !important;
+  }
+
+  .hero-actions-mobile {
+    display: block;
+    background-color: var(--color-bg);
+    padding: 1.6rem 0 1.2rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .hero-actions-mobile-inner {
     display: flex;
     flex-direction: column;
+    gap: 0.8rem;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .hero-actions-mobile-inner .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 1.4rem;
+  }
+
+  .hero-visual {
+    min-height: 58vh;
+    min-height: 58dvh;
+    padding: 3.5rem 1rem 2.5rem;
   }
 
   .hero-content {
-    position: relative;
-    z-index: 2;
-    min-height: 75vh;
-    min-height: 75dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem 1rem 2rem;
+    padding: 1.5rem 0.5rem;
   }
-
-  .hero-actions {
-    position: relative;
-    z-index: 2;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    padding: 1.5rem 5%;
-    background-color: rgba(26, 24, 22, 0.97);
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .hero-actions .btn {
-    width: 100%;
-    justify-content: center;
-  }
-
 
   .hero-title {
-    font-size: 2.3rem;
+    font-size: 2.2rem;
   }
 
   .hero-subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 1.6rem;
+    font-size: 1.05rem;
+    margin-bottom: 0;
+  }
+
+  /* Spaziatura nobile tra hero e calendario */
+  #prossimi-eventi {
+    padding-top: 3.8rem;
+    scroll-margin-top: 4.5rem;
   }
 
   .lightbox-nav {
@@ -1712,26 +1736,40 @@ p {
     width: 92%;
   }
 
+  .hero-visual {
+    min-height: 52vh;
+    min-height: 52dvh;
+    padding: 3rem 0.8rem 2rem;
+  }
+
   .hero-content {
-    min-height: 65vh;
-    min-height: 65dvh;
-    padding: 3rem 0.8rem 1.5rem;
+    padding: 1rem 0.4rem;
   }
 
   .hero-badge {
     font-size: 0.78rem;
     padding: 0.3rem 0.8rem;
     letter-spacing: 0.05em;
+    margin-bottom: 1rem;
   }
 
   .hero-title {
-    font-size: 2rem;
+    font-size: 1.95rem;
   }
 
   .hero-subtitle {
-    font-size: 1rem;
+    font-size: 0.98rem;
     line-height: 1.5;
-    margin-bottom: 1.4rem;
+    margin-bottom: 0;
+  }
+
+  .hero-actions-mobile {
+    padding: 1.3rem 0 0.9rem 0;
+  }
+
+  #prossimi-eventi {
+    padding-top: 3.2rem;
+    scroll-margin-top: 4rem;
   }
 
   .calendar-event-card {

@@ -1,24 +1,33 @@
 {{ define "main" }}
 <!-- Hero Section Cinematica con foto autentica del giardino -->
 <section class="hero-section">
-  <div class="hero-media">
-    <picture>
-      <source srcset="/images/hero.webp" type="image/webp">
-      <img src="/images/hero.jpg" alt="Casa Usellini - Il giardino storico e le Casacce" class="hero-bg-img" loading="eager" fetchpriority="high">
-    </picture>
-    <div class="hero-overlay"></div>
+  <div class="hero-visual">
+    <div class="hero-media">
+      <picture>
+        <source srcset="/images/hero.webp" type="image/webp">
+        <img src="/images/hero.jpg" alt="Casa Usellini - Il giardino storico e le Casacce" class="hero-bg-img" loading="eager" fetchpriority="high">
+      </picture>
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <span class="hero-badge">{{ if eq site.Language.Lang "en" }}Historic 18th-Century Residence &bull; Arona{{ else }}Dimora Storica del '700 &bull; Arona{{ end }}</span>
+      <h1 class="hero-title">{{ site.Title }}</h1>
+      <p class="hero-subtitle">
+        {{ if eq site.Language.Lang "en" }}
+        Historic 18th-century residence in the heart of Arona, on Lake Maggiore. An architectural heritage of porticos, secular gardens, and classical music.
+        {{ else }}
+        Dimora storica del Settecento nel cuore di Arona, sul Lago Maggiore. Un patrimonio di portici, giardini secolari e grande musica.
+        {{ end }}
+      </p>
+      <div class="hero-actions hero-actions-desktop">
+        <a href="#prossimi-eventi" class="btn btn-primary">{{ if eq site.Language.Lang "en" }}Upcoming Events &darr;{{ else }}Prossimi Appuntamenti &darr;{{ end }}</a>
+        <a href="{{ if eq site.Language.Lang "en" }}/en/storia/{{ else }}/storia/{{ end }}" class="btn btn-secondary">{{ if eq site.Language.Lang "en" }}History of the Palace &rarr;{{ else }}Storia della Casa &rarr;{{ end }}</a>
+      </div>
+    </div>
   </div>
-  <div class="hero-content">
-    <span class="hero-badge">{{ if eq site.Language.Lang "en" }}Historic 18th-Century Residence &bull; Arona{{ else }}Dimora Storica del '700 &bull; Arona{{ end }}</span>
-    <h1 class="hero-title">{{ site.Title }}</h1>
-    <p class="hero-subtitle">
-      {{ if eq site.Language.Lang "en" }}
-      Historic 18th-century residence in the heart of Arona, on Lake Maggiore. An architectural heritage of porticos, secular gardens, and classical music.
-      {{ else }}
-      Dimora storica del Settecento nel cuore di Arona, sul Lago Maggiore. Un patrimonio di portici, giardini secolari e grande musica.
-      {{ end }}
-    </p>
-    <div class="hero-actions">
+
+  <div class="hero-actions-mobile">
+    <div class="container hero-actions-mobile-inner">
       <a href="#prossimi-eventi" class="btn btn-primary">{{ if eq site.Language.Lang "en" }}Upcoming Events &darr;{{ else }}Prossimi Appuntamenti &darr;{{ end }}</a>
       <a href="{{ if eq site.Language.Lang "en" }}/en/storia/{{ else }}/storia/{{ end }}" class="btn btn-secondary">{{ if eq site.Language.Lang "en" }}History of the Palace &rarr;{{ else }}Storia della Casa &rarr;{{ end }}</a>
     </div>
