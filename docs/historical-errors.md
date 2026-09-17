@@ -85,7 +85,15 @@
 - **Root Cause**: Relative URLs (e.g. `src="gallery/photo.jpg"`) resolve relative to the current URL path. In translated URLs (e.g. `/en/galleria/`), the browser attempts to fetch from `/en/galleria/gallery/photo.jpg`, producing 404 errors because Hugo outputs shared non-page bundle files at `/galleria/gallery/`. Furthermore, `site.RegularPages` in Hugo multilingual mode strictly partitions pages by language; if translated posts do not exist for a section, section archives and dynamic homepage data loops (like concert calendars) silently evaluate to empty collections.
 - **Prevention Patterns**:
   - Always normalize media URLs in multilingual templates with absolute root paths (e.g. `printf "/%s/%s" .Section .src` or `.RelPermalink`) to ensure valid resolution across all language prefixes.
-  - Implement cross-language fallbacks for dynamic data loops and listings (`{{ if eq (len $newsPages) 0 }}{{ $newsPages = where (index hugo.Sites 0).RegularPages "Section" "news" }}{{ end }}`) so that complete archives and event schedules remain visible to international visitors even before dedicated translated articles are authored.
+---
+
+### [Responsive Layout & Visual Hierarchy] Structural Decoupling of Hero Visual Media and Interactive Actions
+- **Context**: Designing full-bleed hero sections on responsive websites where photography must be prominent without obscuring critical calls to action (CTAs) across disparate aspect ratios.
+- **Root Cause**: Forcing interactive buttons inside the same absolute-positioned media container across both desktop and mobile viewports causes visual overlap and clutter on tall vertical mobile screens. Simultaneously, eliminating section top margins without dedicated section anchor padding causes below-the-fold titles (e.g. event calendars) to collide visually with the hero edge or get obscured beneath sticky headers upon in-page anchor navigation.
+- **Prevention Patterns**:
+  - Structurally separate the visual media wrapper (`.hero-visual`) from responsive action bars (`.hero-actions-mobile`), rendering desktop CTAs overlaid inside the media and mobile CTAs cleanly below the photograph in normal document flow.
+  - Implement explicit `scroll-margin-top` alongside generous `padding-top` on anchor targets (`#prossimi-eventi`) to preserve breathing room and prevent sticky header clipping.
+
 
 
 
