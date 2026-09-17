@@ -244,8 +244,12 @@ function initEventCalendar() {
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.classList.contains('is-active')) return;
-      filterBtns.forEach(b => b.classList.remove('is-active'));
+      filterBtns.forEach(b => {
+        b.classList.remove('is-active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('is-active');
+      btn.setAttribute('aria-pressed', 'true');
       const filterYear = btn.getAttribute('data-year');
 
       const list = container.querySelector('.calendar-events-list');
@@ -417,14 +421,12 @@ function initThemeToggle() {
   const isEnglish = document.documentElement.lang && document.documentElement.lang.startsWith('en');
 
   const updateUI = (isDark) => {
+    const visibleText = isEnglish ? (isDark ? 'Theme: Dark' : 'Theme: Light') : (isDark ? 'Tema: Scuro' : 'Tema: Chiaro');
     if (labelEl) {
-      if (isEnglish) {
-        labelEl.textContent = isDark ? 'Theme: Dark' : 'Theme: Light';
-      } else {
-        labelEl.textContent = isDark ? 'Tema: Scuro' : 'Tema: Chiaro';
-      }
+      labelEl.textContent = visibleText;
     }
-    toggleBtn.setAttribute('aria-pressed', isDark);
+    toggleBtn.setAttribute('aria-label', visibleText);
+    toggleBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
   };
 
   const getEffectiveTheme = () => {

@@ -1,0 +1,57 @@
+# Palazzo Usellini — Extended Context Document
+
+## Overview & Identity
+Palazzo Usellini (also known as Casa Usellini) is an 18th-century noble residence located in the historic center of Arona, a lakeside town on the Piedmont shore of Lake Maggiore (province of Novara, Italy). The residence is a member of ADSI (Associazione Dimore Storiche Italiane) and stands as an architectural testimony to the cultural and trade exchanges between Northern Italy and Northern Europe during the Enlightenment.
+
+- **Official Website**: https://palazzousellini.com/
+- **Address**: Via Pertossi 12, 28041 Arona (NO), Italy
+- **Geographic Coordinates**: 45.7602° N, 8.5606° E
+- **Primary Use**: Private residence and seasonal cultural venue for classical chamber music, literary meetings, and historic open days.
+
+---
+
+## Architectural and Historical Timeline
+
+### Origins (1530)
+The oldest preserved nucleus of the palace dates back to approximately 1530. This includes the central building structure facing Via Pertossi, the ground-floor portico of three wings, and a historic communicating gateway leading toward the adjoining Church of Santa Marta and the ancient Visitation convent.
+
+### The 1783 Renovation and Carlantonio Usellini
+In the second half of the 18th century, Carlantonio Usellini (1741–1816) emancipated from his family in the Alto Vergante region and moved to Amsterdam, the Netherlands. There, alongside his brother Pietro Maria, he established a thriving international merchant enterprise trading in English steel, Flemish textiles, German porcelain, and fine antiques across Britain, France, and Germany.
+
+Upon returning to Arona in 1792 after transferring the commercial business to his brother, Carlantonio consolidated and embellished the residence in Via Pertossi. Major structural enhancements were completed around 1783, a date engraved on several stone portals and buildings:
+1. **Dutch Baroque Influence**: Carlantonio commissioned a wooden facade model from a Dutch architect, incorporating characteristic Dutch sash and gridded window designs, rare in Northern Italy.
+2. **Internal Courtyard Portico**: A three-winged colonnade featuring warm ochre stucco (`#DCAE45`) and noble bordeaux wooden shutters (`#74242B`).
+3. **Historic Italian Garden and Annexes**: Behind the palace, an expansive garden was laid out, accompanied by two independent service structures:
+   - *Gli Stallini*: The carriage house and stables.
+   - *Le Casacce*: An elegant garden pavilion housing the billiard room, ballroom, and adorned with authentic 18th-century verdigris green shutters (`#487A6F`).
+
+### 19th & 20th Century Heritage
+- **Filippo Usellini (1809–1872)**: Son of Carlantonio, Mayor of Corciago and Arona. Married Guglielmina Brielli, daughter of Pietro Brielli (Senator of the Kingdom under King Carlo Alberto and Mayor of Novara).
+- **Lorenzo Usellini (1856–1925)**: Industrialist who founded an Italian perfume and cosmetics manufacturing company in Milan (1882), utilizing Palazzo Usellini as the family's summer retreat.
+- **Gianfilippo Usellini (1904–1971)**: Renowned 20th-century Italian figurative and metaphysical painter. His frescoes and paintings frequently depict the porticos, arches, windows, and gardens of Palazzo Usellini.
+- **Guglielmo Usellini (1906–1958)**: Dedicated European federalist, Secretary General of the European Federalist Movement alongside Altiero Spinelli until his death in Paris.
+
+---
+
+## Cultural Programme & The "Lago Maggiore Musica" Festival
+Each summer, the private courtyard and secular garden of Casa Usellini transform into an open-air concert hall for the "Lago Maggiore Musica" festival, organized by Gioventù Musicale d'Italia:
+- **Repertoire**: Classical chamber ensembles, solo violin and piano recitals, string quartets, and baroque masterpieces.
+- **Atmosphere**: Intimate concerts lit by courtyard lanterns and surrounded by century-old magnolias, verdigris shutters, and 18th-century architectural acoustics.
+- **Seasons & Archives**:
+  - *2026 Season*: Chamber music recitals and solo violin programmes.
+  - *2025 Season*: Chamber music duos, harp, and cello recitals.
+  - *2024 Season*: String ensembles and classical piano performances.
+  - *2020–2023 Seasons*: Annual summer concert residencies and cultural readings.
+
+---
+
+## Digital Architecture & Sustainability Standard
+The digital presence of Palazzo Usellini is maintained according to strict eco-design, privacy, and performance standards:
+- **Static Generation**: Built with Hugo SSG (zero database, zero dynamic server runtime).
+- **Zero Cookies & GDPR**: No tracking pixels, no advertising scripts, no third-party telemetry, 100% compliant with privacy regulations.
+- **Self-Hosted Mapping**: Interactive maps run via self-hosted Leaflet and OpenStreetMap tiles, completely free of remote ad-tracking scripts.
+- **Authentic Palettes**: CSS tokens directly sampled from the physical building:
+  - `--color-bordeaux` (`#74242B` / `#E57D86` dark mode)
+  - `--color-verde` (`#487A6F` / `#7EBEB0` dark mode)
+  - `--color-giallo-portico` (`#DCAE45`)
+  - `--color-azzurro-facciata` (`#EDF3F7` / `#1E2529` dark mode)

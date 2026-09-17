@@ -4,8 +4,9 @@
   <div class="hero-visual">
     <div class="hero-media">
       <picture>
+        <source media="(max-width: 768px)" srcset="/images/hero-mobile.webp" type="image/webp">
         <source srcset="/images/hero.webp" type="image/webp">
-        <img src="/images/hero.jpg" alt="Casa Usellini - Il giardino storico e le Casacce" class="hero-bg-img" loading="eager" fetchpriority="high">
+        <img src="/images/hero.jpg" alt="Casa Usellini - Il giardino storico e le Casacce" class="hero-bg-img" loading="eager" fetchpriority="high" width="2000" height="1502">
       </picture>
       <div class="hero-overlay"></div>
     </div>
@@ -84,15 +85,15 @@
     {{ end }}
 
     <!-- Selettore per Stagione / Anno Storico -->
-    <div class="calendar-year-filters" role="tablist" aria-label="Seleziona la stagione degli eventi">
-      <span class="filter-label">{{ if eq site.Language.Lang "en" }}Historical editions:{{ else }}Edizioni storiche:{{ end }}</span>
-      <button type="button" class="year-filter-btn is-active" data-year="current">{{ if eq site.Language.Lang "en" }}2026 Season{{ else }}Stagione 2026{{ end }}</button>
+    <div class="calendar-year-filters" role="group" aria-label="{{ if eq site.Language.Lang "en" }}Filter events by season{{ else }}Filtra eventi per stagione{{ end }}">
+      <span class="filter-label" aria-hidden="true">{{ if eq site.Language.Lang "en" }}Historical editions:{{ else }}Edizioni storiche:{{ end }}</span>
+      <button type="button" class="year-filter-btn is-active" data-year="current" aria-pressed="true">{{ if eq site.Language.Lang "en" }}2026 Season{{ else }}Stagione 2026{{ end }}</button>
       {{ range $years }}
         {{ if ne . "2026" }}
-          <button type="button" class="year-filter-btn" data-year="{{ . }}">{{ . }}</button>
+          <button type="button" class="year-filter-btn" data-year="{{ . }}" aria-pressed="false">{{ . }}</button>
         {{ end }}
       {{ end }}
-      <button type="button" class="year-filter-btn" data-year="all">{{ if eq site.Language.Lang "en" }}All editions{{ else }}Tutte le edizioni{{ end }}</button>
+      <button type="button" class="year-filter-btn" data-year="all" aria-pressed="false">{{ if eq site.Language.Lang "en" }}All editions{{ else }}Tutte le edizioni{{ end }}</button>
     </div>
 
     <!-- Lista Unificata Card Calendario -->

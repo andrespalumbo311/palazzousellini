@@ -1,0 +1,29 @@
+# Palazzo Usellini
+
+> Historic 18th-century residence in Arona on Lake Maggiore (Italy), member of ADSI (Associazione Dimore Storiche Italiane). Architectural heritage of neoclassical and Dutch Baroque influences, secular Italian gardens, and active cultural venue for classical chamber music concerts.
+
+Palazzo Usellini (also referred to historically as Casa Usellini) is an authentic architectural complex located in the historic center of Arona (Piedmont, Italy) at Via Pertossi 12. Dating back to 1530 with major 1783 architectural works commissioned by merchant Carlantonio Usellini, the palace features a three-winged portico courtyard, historic service buildings ("gli Stallini" and "le Casacce"), and an expansive private garden. It regularly hosts the prestigious "Lago Maggiore Musica" festival, theatrical performances, and cultural initiatives.
+
+## Core Navigation & Sections
+
+- [Home](https://palazzousellini.com/): Comprehensive overview of Palazzo Usellini, its architectural highlights, and the current summer season.
+- [Events & Concerts](https://palazzousellini.com/#prossimi-eventi): Real-time and historical calendar of classical concerts and cultural evenings (2020–2026).
+- [History](https://palazzousellini.com/storia/): Architectural chronology from 1530 to the 1783 renovation, the merchant Carlantonio Usellini, and 20th-century painter Gianfilippo Usellini.
+- [Photo Gallery](https://palazzousellini.com/galleria/): Curated photographic documentation of the facade, internal portico, verdigris garden shutters, and secular grounds.
+- [News & Archive](https://palazzousellini.com/news/): Chronological collection of festival announcements, restoration reports, and press releases.
+- [Contact & Location](https://palazzousellini.com/contatti/): Practical visitor guidelines, address details, interactive local map, and direct contact form.
+- [Privacy Policy](https://palazzousellini.com/privacy/): Strict zero-tracking cookie policy and GDPR compliance statement.
+
+## Multilingual Support
+
+- [English Edition](https://palazzousellini.com/en/): Complete English localization for international visitors, music lovers, and cultural tourism.
+
+## Location & Practical Info
+
+- Address: Via Pertossi 12, 28041 Arona (NO), Piedmont, Italy
+- Coordinates: Latitude 45.7602° N, Longitude 8.5606° E
+- Public Access: Open during scheduled concert evenings, cultural rassegne, and heritage openings (ADSI National Days).
+
+## Optional Resources
+
+- [Full LLM Context](https://palazzousellini.com/llms-full.txt): In-depth background text including detailed biographical, architectural, and complete event documentation for autonomous AI agents.

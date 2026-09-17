@@ -16,6 +16,42 @@
   <!-- Favicon / Brand -->
   <link rel="icon" type="image/png" href="/images/logo.png">
 
+  <!-- Preload Hero Image per LCP Istantaneo -->
+  {{ if .IsHome }}
+  <link rel="preload" as="image" href="/images/hero-mobile.webp" type="image/webp" media="(max-width: 768px)" fetchpriority="high">
+  <link rel="preload" as="image" href="/images/hero.webp" type="image/webp" media="(min-width: 769px)" fetchpriority="high">
+  {{ end }}
+
+  <!-- Agentic Browsing & LLMs -->
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Context">
+
+  <!-- Dati Strutturati Schema.org per Motori di Ricerca e Agenti AI -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LandmarksOrHistoricalBuildings",
+    "name": "Palazzo Usellini",
+    "alternateName": "Casa Usellini",
+    "url": "https://palazzousellini.com/",
+    "logo": "https://palazzousellini.com/images/logo.png",
+    "image": "https://palazzousellini.com/images/hero.webp",
+    "description": "{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Via Pertossi 12",
+      "addressLocality": "Arona",
+      "addressRegion": "NO",
+      "postalCode": "28041",
+      "addressCountry": "IT"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 45.7602,
+      "longitude": 8.5606
+    }
+  }
+  </script>
+
   <!-- Tema Scuro / Chiaro: Inizializzazione Immediata Anti-FOUC -->
   <script>
     (function() {
@@ -44,7 +80,7 @@
   <header class="site-header">
     <div class="container header-container">
       <a href="{{ site.Home.RelPermalink }}" class="site-brand">
-        <img src="/images/logo.png" alt="Palazzo Usellini" class="site-logo">
+        <img src="/images/logo.png" alt="Palazzo Usellini" class="site-logo" width="35" height="44">
         <span class="site-title">{{ site.Title }}</span>
       </a>
 
@@ -131,7 +167,7 @@
     <div class="footer-bottom-bar">
       <div class="container footer-bottom-container">
         <p class="copyright">&copy; {{ now.Format "2006" }} {{ site.Title }} &bull; Via Pertossi 12, Arona (NO)</p>
-        <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="{{ if eq site.Language.Lang "en" }}Toggle theme (dark / light){{ else }}Cambia tema (chiaro / scuro){{ end }}">
+        <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="{{ if eq site.Language.Lang "en" }}Theme: Light{{ else }}Tema: Chiaro{{ end }}" aria-pressed="false">
           <span class="theme-icon-wrap" aria-hidden="true">
             <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>

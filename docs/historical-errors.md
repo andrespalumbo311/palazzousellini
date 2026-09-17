@@ -102,6 +102,23 @@
   - Decouple interactive button fills: preserve deep, saturated bordeaux fills (`#8F242C`) with crisp white typography for primary CTAs so buttons retain authority and tactile contrast.
   - Implement a zero-FOUC (Flash of Unstyled Content) synchronous bootstrap in `<head>` alongside dual-layer CSS cascade (supporting both system `prefers-color-scheme` and persistent `data-theme` manual overrides).
 
+---
+
+### [Core Web Vitals & Accessibility] Mobile LCP Asset Sizing, ARIA Role Hierarchies & Agentic Browsing Readiness
+- **Context**: Optimizing static sites (Hugo SSG) for Google Lighthouse 13 / PageSpeed Insights across Mobile/Desktop, WCAG AA/AAA standards, and AI Agentic Browsing (`agent-accessibility-tree` & `llms.txt`).
+- **Root Cause**:
+  1. *Unscaled Hero Images*: Serving a desktop 2000px WebP (~620 KB) indiscriminately to mobile screens inflates LCP (4.4s) due to excessive payload and decode latency on bandwidth-constrained mobile devices.
+  2. *ARIA Children-Role Mismatch*: Using `role="tablist"` on a container where children are standard `<button>` tags without `role="tab"` violates WCAG 1.3.1 (`aria-required-children`), which in turn invalidates the browser's accessibility tree and collapses Lighthouse's `agent-accessibility-tree` / `agentic-browsing` audit from 100% to 50%.
+  3. *WCAG 2.5.3 (Label in Name) Discrepancies*: Setting a static descriptive `aria-label` (e.g. "Toggle theme (dark / light)") on a button whose visible inner text is "Theme: Light" causes a mismatch because assistive tech and screen readers expect the accessible name to strictly include or match the visible label.
+  4. *Compounded CSS Opacity degrading Color Contrast*: Applying `opacity: 0.85` to a parent card and another `opacity: 0.85` to an inner element washes out text (`#66625D`) against light surfaces down to `#8f8c87` (~3.1:1 contrast), violating WCAG AA 4.5:1.
+- **Prevention Patterns**:
+  1. *Responsive `<picture>` with Preloads*: Serve dedicated mobile breakpoints (`hero-mobile.webp` at ≤ 800px / ~98 KB) via `<source media="(max-width: 768px)">` and paired `<link rel="preload" as="image" ... media="...">` in `<head>` to cut mobile LCP by > 80%.
+  2. *Semantic Filter Groups over Fake Tabs*: Use `role="group"` with `aria-pressed="true|false"` for in-page list filtering rather than `role="tablist"`, maintaining clean accessibility trees for both human screen readers and autonomous AI agents.
+  3. *Synchronized Accessible Names*: Keep `aria-label` synchronized with the visible text string whenever UI state changes, or allow the element's visible text node to serve as its accessible name.
+  4. *Opacity-Free Visual Attenuation & Calibrated Tokens*: Differentiate past or secondary items via subtle background tints (`#fdfbf7`), grayscale filters, and darkened text tokens (`#54504C`, `#26544A`) that retain > 7:1 contrast without opacity bleed.
+  5. *Standardized Agentic Browsing Assets*: Provide root `/llms.txt` and `/llms-full.txt` alongside JSON-LD Schema.org (`LandmarksOrHistoricalBuildings`) to ensure autonomous AI search engines and agents parse site structure without crawling degradation.
+
+
 
 
 

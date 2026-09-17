@@ -26,7 +26,7 @@
   --color-bg: #FAF8F5;
   --color-surface: #FFFFFF;
   --color-text: #201F1E;
-  --color-text-muted: #66625D;
+  --color-text-muted: #54504C;
   --color-border: #E8E2D8;
 
   --color-header-bg: rgba(253, 252, 248, 0.98);
@@ -860,13 +860,23 @@ p {
 
 .event-meta-tag {
   background: var(--color-azzurro-facciata);
-  color: var(--color-verde);
+  color: #26544A;
   border: 1px solid var(--color-azzurro-border);
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   padding: 0.15rem 0.55rem;
   border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .event-meta-tag {
+    color: var(--color-verde);
+  }
+}
+
+:root[data-theme="dark"] .event-meta-tag {
+  color: var(--color-verde);
 }
 
 .event-card-title {
@@ -884,14 +894,12 @@ p {
 /* Eventi Passati: Visibili sotto al separatore nobiliare con badge attenuato */
 .calendar-event-card.is-past {
   display: grid;
-  opacity: 0.85;
   background: #fdfbf7;
   border-color: rgba(220, 174, 69, 0.4);
 }
 
 .calendar-event-card.is-past .event-date-block {
   filter: grayscale(80%);
-  opacity: 0.85;
 }
 
 .calendar-event-card.is-past .event-card-title {
