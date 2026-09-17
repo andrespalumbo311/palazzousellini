@@ -274,37 +274,37 @@ function initLanguagePreference() {
   const storageKey = 'palazzo_usellini_lang';
   const path = window.location.pathname;
 
-  // Intercetta click sui link lingua
+  // Intercetta click sui link lingua — salva la preferenza PRIMA di navigare
   const langLinks = document.querySelectorAll('.lang-switcher .lang-link');
   langLinks.forEach(link => {
-    link.addEventListener('click', () => {
+    link.addEventListener('click', (e) => {
       const label = link.textContent.trim().toUpperCase();
       if (label === 'EN') {
         localStorage.setItem(storageKey, 'en');
       } else if (label === 'IT') {
         localStorage.setItem(storageKey, 'it');
       }
+      // Lascia il browser navigare normalmente dopo aver salvato la preferenza
     });
   });
 
-  // Rilevamento lingua alla radice "/"
-  if (path === '/' || path === '/index.html') {
-    const savedLang = localStorage.getItem(storageKey);
-    // Se ha scelto espressamente l'italiano, non fare nulla e resta su "/"
-    if (savedLang === 'it') {
-      return;
-    }
-    // Se ha scelto l'inglese, reindirizza su "/en/"
-    if (savedLang === 'en') {
-      window.location.replace('/en/');
-      return;
-    }
+  // Rilevamento automatico solo sulla radice "/" — mai sulle sotto-pagine
+  // per non interferire con link diretti o navigazione manuale
+  if (path !== '/' && path !== '/index.html') return;
 
-    // Default per tutti i visitatori: se NON è italiano, default su "/en/"
-    const navLang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-    if (!navLang.toLowerCase().startsWith('it')) {
-      window.location.replace('/en/');
-    }
+  const savedLang = localStorage.getItem(storageKey);
+
+  // Preferenza esplicita dell'utente: rispettarla sempre
+  if (savedLang === 'it') return;
+  if (savedLang === 'en') {
+    window.location.replace('/en/');
+    return;
+  }
+
+  // Prima visita: rilevamento browser, default inglese se non italiano
+  const navLang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+  if (!navLang.toLowerCase().startsWith('it')) {
+    window.location.replace('/en/');
   }
 }
 
