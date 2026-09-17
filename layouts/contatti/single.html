@@ -28,7 +28,7 @@
 
     <!-- Mappa Nativa OpenStreetMap Leaflet (Zero Cookie, Privacy GDPR) + Link Rapido Google Maps -->
     <div class="map-container">
-      <div id="osm-map" class="osm-map-viewport" role="region" aria-label="Mappa di Palazzo Usellini ad Arona"></div>
+      <div id="osm-map" class="osm-map-viewport" role="region" aria-label="{{ if eq site.Language.Lang "en" }}Map of Palazzo Usellini in Arona{{ else }}Mappa di Palazzo Usellini ad Arona{{ end }}"></div>
       <div class="map-actions">
         <p>{{ if eq site.Language.Lang "en" }}Interactive map powered by <strong>OpenStreetMap</strong> (zero tracking cookies).{{ else }}Mappa interattiva su base <strong>OpenStreetMap</strong> (nessun cookie di tracciamento).{{ end }}</p>
         <a href="https://www.google.com/maps/search/?api=1&query=45.762615,8.559467" target="_blank" rel="noopener noreferrer" class="btn btn-external">

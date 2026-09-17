@@ -319,15 +319,20 @@ function initLightbox() {
   const galleryLinks = Array.from(document.querySelectorAll('.photo-gallery-item a, .article-gallery-grid a, .page-gallery-section a'));
   if (galleryLinks.length === 0) return;
 
+  const isEn = (document.documentElement.lang || '').toLowerCase().startsWith('en');
+  const closeLabel = isEn ? 'Close' : 'Chiudi';
+  const prevLabel = isEn ? 'Previous' : 'Precedente';
+  const nextLabel = isEn ? 'Next' : 'Successivo';
+
   // Crea elemento modale nel DOM
   const modal = document.createElement('div');
   modal.className = 'lightbox-modal';
   modal.innerHTML = `
     <div class="lightbox-backdrop"></div>
     <div class="lightbox-content">
-      <button class="lightbox-close" aria-label="Chiudi">&times;</button>
-      <button class="lightbox-nav lightbox-prev" aria-label="Precedente">&#10094;</button>
-      <button class="lightbox-nav lightbox-next" aria-label="Successivo">&#10095;</button>
+      <button class="lightbox-close" aria-label="${closeLabel}">&times;</button>
+      <button class="lightbox-nav lightbox-prev" aria-label="${prevLabel}">&#10094;</button>
+      <button class="lightbox-nav lightbox-next" aria-label="${nextLabel}">&#10095;</button>
       <div class="lightbox-figure">
         <img class="lightbox-img" src="" alt="">
         <p class="lightbox-caption"></p>

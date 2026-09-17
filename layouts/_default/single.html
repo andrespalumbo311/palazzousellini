@@ -19,7 +19,7 @@
 
   {{ with .Params.gallery }}
     <section class="page-gallery-section">
-      <h2>Immagini storiche</h2>
+      <h2>{{ if eq site.Language.Lang "en" }}Historical Images{{ else }}Immagini storiche{{ end }}</h2>
       <div class="article-gallery-grid">
         {{ range . }}
           <figure class="gallery-card">

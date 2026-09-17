@@ -118,10 +118,18 @@
   4. *Opacity-Free Visual Attenuation & Calibrated Tokens*: Differentiate past or secondary items via subtle background tints (`#fdfbf7`), grayscale filters, and darkened text tokens (`#54504C`, `#26544A`) that retain > 7:1 contrast without opacity bleed.
   5. *Standardized Agentic Browsing Assets*: Provide root `/llms.txt` and `/llms-full.txt` alongside JSON-LD Schema.org (`LandmarksOrHistoricalBuildings`) to ensure autonomous AI search engines and agents parse site structure without crawling degradation.
 
+---
 
-
-
-
-
-
-
+### [Hugo i18n & Multilingual Architecture] Prefix-Based Menu Active State Collisions, SEO Alternates & Localization Leaks
+- **Context**: Serving multi-language static websites (`/` and `/en/`) with Hugo SSG where the default language resides at the root `/` and secondary languages reside in subdirectories (`/en/`).
+- **Root Cause**:
+  1. *Hardcoded Root URL Checks for Menu Active State*: Testing `ne .URL "/"` to exclude the home item from prefix-based active matching (`hasPrefix $.RelPermalink .URL`) fails on secondary languages where the home URL is `/en/`. Because `"/en/" != "/"`, all pages under `/en/` match the prefix `"/en/"`, causing the home menu item to remain active concurrently with the actual current section on every subpage.
+  2. *Missing Bidirectional `<head>` hreflang & Canonical Directives*: Relying exclusively on XML sitemaps without declaring `<link rel="canonical">` and `<link rel="alternate" hreflang="...">` (including `x-default`) in the HTML `<head>` leaves search engine crawlers without unambiguous language pairing and canonical directives.
+  3. *Unlocalized UI Strings and Hardcoded Backlinks*: Omitting language conditionals or dictionary lookups on utility UI badges, back links, and aria-labels leads to Italian strings leaking into English templates and back-links navigating across language boundaries (e.g. English subpage returning to `/` instead of `/en/`).
+  4. *Unused Taxonomy Kinds*: Leaving `disableKinds` unset generates empty or unlocalized tag/category archive listings that degrade crawl budgets.
+- **Prevention Patterns**:
+  - In navigation templates, always evaluate parent/prefix active states against the language-specific root dynamically (`ne .URL site.Home.RelPermalink`) instead of a static `"/"`.
+  - Always render canonical URLs and iterate `.AllTranslations` in `<head>` to emit reciprocal `hreflang` tags alongside `x-default` mapped to the primary language edition.
+  - Bind all inter-language back-links to `site.Home.RelPermalink` rather than hardcoded `/`.
+  - Normalize Open Graph `og:locale` to underscore notation (`it_IT`, `en_US`) and emit `og:locale:alternate`.
+  - Explicitly disable unused SSG taxonomy kinds (`disableKinds = ['taxonomy', 'term']`) in `hugo.toml` to prevent thin or unlocalized orphan pages.

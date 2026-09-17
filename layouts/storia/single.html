@@ -2,7 +2,7 @@
 <article class="page-single container">
   <header class="page-header">
     <div class="article-meta">
-      <span class="tag-badge" style="background: var(--color-giallo-soft); color: var(--color-bordeaux); border-color: var(--color-giallo-portico);">Monografia Storica</span>
+      <span class="tag-badge" style="background: var(--color-giallo-soft); color: var(--color-bordeaux); border-color: var(--color-giallo-portico);">{{ if eq site.Language.Lang "en" }}Historical Monograph{{ else }}Monografia Storica{{ end }}</span>
     </div>
     <h1 class="page-title">{{ .Title }}</h1>
     {{ with .Params.description }}
@@ -37,7 +37,7 @@
   {{ end }}
 
   <footer class="article-footer">
-    <a href="/" class="btn-back">&larr; Torna alla pagina iniziale</a>
+    <a href="{{ site.Home.RelPermalink }}" class="btn-back">&larr; {{ if eq site.Language.Lang "en" }}Back to home page{{ else }}Torna alla pagina iniziale{{ end }}</a>
   </footer>
 </article>
 {{ end }}

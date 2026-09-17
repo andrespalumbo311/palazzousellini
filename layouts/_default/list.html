@@ -19,7 +19,7 @@
           <time>{{ .Date | time.Format ":date_long" }}</time>
           <h2 class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
           <p class="card-excerpt">{{ .Description }}</p>
-          <a href="{{ .RelPermalink }}" class="card-link">Leggi &rarr;</a>
+          <a href="{{ .RelPermalink }}" class="card-link">{{ if eq site.Language.Lang "en" }}Read &rarr;{{ else }}Leggi &rarr;{{ end }}</a>
         </div>
       </article>
     {{ end }}

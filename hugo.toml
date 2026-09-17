@@ -1,5 +1,6 @@
 baseURL = 'https://palazzousellini.com/'
 defaultContentLanguage = 'it'
+disableKinds = ['taxonomy', 'term']
 
 [languages]
   [languages.it]
