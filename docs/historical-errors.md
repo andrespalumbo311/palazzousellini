@@ -15,7 +15,8 @@
   4. By default, `paramiko` searches for local runner SSH keys and probes the SSH agent before submitting passwords, causing strict SFTP servers (such as Hetzner) to immediately reject the handshake (`paramiko.ssh_exception.AuthenticationException`).
 - **Prevention Patterns**:
   - Never store plain-text credentials, usernames, or internal server hostnames in repository code; always leverage GitHub Repository Secrets (`HETZNER_SFTP_HOST`, `HETZNER_SFTP_USER`, `HETZNER_SFTP_PASSWORD`, `HETZNER_REMOTE_DIR`).
-  - Deploy via dedicated Python `paramiko` script (`scripts/deploy_sftp.py`): Explicitly set `look_for_keys=False` and `allow_agent=False` on `ssh.connect()`, backed by a fallback handler for PAM `keyboard-interactive`. This completely isolates SFTP deployment from shell quoting, heredoc parsing, and OpenSSH path canonicalization bugs (`path canonicalization failed`), auto-detects remote directory layout, and creates directory trees (`mkdir -p`) deterministically.
+  - For CI/CD SFTP deployment, prefer `lftp mirror --reverse --delete --parallel=N` for parallel delta-only transfers (only changed files uploaded, stale files removed). This replaces slow sequential Python/paramiko uploads.
+  - When scripting SFTP with `paramiko` (e.g. local testing via `scripts/deploy_sftp.py`), use `Transport.auth_password()` directly instead of `SSHClient.connect()`. `SSHClient` probes multiple auth methods in unpredictable order (publickey, keyboard-interactive) before password, causing strict SFTP servers to reject the handshake. Direct `Transport.auth_password()` sends only the password method.
   - Restrict SFTP synchronization strictly to generated build artifacts (`./public/`) without pushing source files to the remote web hosting root.
 
 ---
@@ -48,12 +49,13 @@
 
 ---
 
-### [i18n & Static Hosting] Hybrid Content Negotiation and Language Preference Persistence
+### [i18n & Static Hosting] Dual-Layer Language Redirect Conflicts (Server-Side vs. Client-Side)
 - **Context**: Serving multi-language static content (`/` and `/en/`) automatically based on visitor locale while strictly honoring manual user language overrides.
-- **Root Cause**: Relying exclusively on client-side JS redirects produces visible layout shifts (FOIC) on first load for non-default locales; conversely, relying strictly on server `Accept-Language` headers without state overrides forces users back to the detected language if they intentionally switch locales.
+- **Root Cause**: Running **two independent redirect mechanisms** — Apache `.htaccess` `mod_rewrite` checking `Accept-Language` headers AND client-side JavaScript checking `localStorage` — creates an unresolvable conflict. The server-side 302 redirect fires **before** the browser executes any JavaScript, so `localStorage` preferences saved by click handlers are never consulted. Users who click the IT language link get redirected back to EN because Apache intercepts the request to `/` and issues a 302 before the page (and its JS) ever loads. The `.htaccess` also referenced a cookie (`palazzo_usellini_lang=it`) that no code ever set, making the server-side override condition permanently unmet.
 - **Prevention Patterns**:
-  - Implement a hybrid strategy: server-level `.htaccess` rewrite conditions on Hetzner Apache for instant zero-latency routing of new visitors requesting English.
-  - Complement with client-side `localStorage` persistence (`palazzo_usellini_lang`) to record explicit user clicks on language links, preventing automatic redirects if an English speaker intentionally explores the Italian version.
+  - **Single source of truth**: Choose ONE layer for language routing — never duplicate redirect logic across server and client.
+  - For static sites with JS-based language preference: use client-side `localStorage` as the sole redirect mechanism (runs on `/` after page load). Remove any server-side `mod_rewrite` language negotiation.
+  - If server-side routing is preferred (zero-latency): ensure the server-side mechanism (cookie, URL parameter) is actually written by the client-side code that handles user language switches. Never reference state (cookies, headers) that no code path produces.
 
 ---
 
