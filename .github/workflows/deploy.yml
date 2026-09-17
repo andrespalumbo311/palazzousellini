@@ -32,7 +32,7 @@ jobs:
       - name: Build static site
         run: hugo --minify
 
-      - name: Deploy via SFTP to Hetzner
+      - name: Deploy via SFTP (lftp mirror)
         env:
           HETZNER_SFTP_HOST: ${{ secrets.HETZNER_SFTP_HOST }}
           HETZNER_SFTP_USER: ${{ secrets.HETZNER_SFTP_USER }}
@@ -40,5 +40,12 @@ jobs:
           HETZNER_SFTP_PORT: ${{ secrets.HETZNER_SFTP_PORT || '22' }}
           HETZNER_REMOTE_DIR: ${{ secrets.HETZNER_REMOTE_DIR }}
         run: |
-          python3 -m pip install --quiet paramiko
-          python3 scripts/deploy_sftp.py
+          sudo apt-get install -yqq lftp > /dev/null 2>&1
+          lftp -u "${HETZNER_SFTP_USER},${HETZNER_SFTP_PASSWORD}" \
+            sftp://${HETZNER_SFTP_HOST}:${HETZNER_SFTP_PORT} -e "
+            set sftp:auto-confirm yes;
+            set net:max-retries 3;
+            set net:reconnect-interval-base 5;
+            mirror --reverse --delete --parallel=10 --no-perms --verbose \
+              ./public ${HETZNER_REMOTE_DIR};
+            quit"

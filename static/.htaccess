@@ -22,16 +22,3 @@ AddDefaultCharset UTF-8
   ExpiresByType application/javascript "access plus 1 month"
 </IfModule>
 
-# Servizio Intelligente della Lingua:
-# Default INGLESE (/en/) per tutti i visitatori internazionali;
-# Serve ITALIANO (/) solo se la lingua del browser è esplicitamente italiano (Accept-Language: it...)
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-
-  # Se si accede alla radice "/" senza cookie esplicito per l'italiano,
-  # e la lingua del browser NON è italiano -> reindirizza all'inglese /en/
-  RewriteCond %{REQUEST_URI} ^/?$
-  RewriteCond %{HTTP_COOKIE} !palazzo_usellini_lang=it [NC]
-  RewriteCond %{HTTP:Accept-Language} !^it [NC]
-  RewriteRule ^$ /en/ [R=302,L]
-</IfModule>
