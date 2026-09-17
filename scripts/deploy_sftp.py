@@ -20,33 +20,17 @@ def main():
         sys.exit(1)
 
     print(f"Connecting via SFTP to {host}:{port} as {user}...")
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    
-    sftp = None
+    transport = paramiko.Transport((host, port))
+    transport.banner_timeout = 30
+    transport.connect()
     try:
-        ssh.connect(
-            host,
-            port=port,
-            username=user,
-            password=password,
-            look_for_keys=False,
-            allow_agent=False,
-            timeout=30
-        )
-        sftp = ssh.open_sftp()
+        transport.auth_password(username=user, password=password)
     except paramiko.ssh_exception.AuthenticationException as e:
-        print("Standard password auth rejected, attempting keyboard-interactive fallback...")
-        try:
-            transport = paramiko.Transport((host, port))
-            transport.connect()
-            def interactive_handler(title, instructions, prompt_list):
-                return [password for _ in prompt_list]
-            transport.auth_interactive(user, interactive_handler)
-            sftp = paramiko.SFTPClient.from_transport(transport)
-        except Exception as fallback_err:
-            print(f"Keyboard-interactive fallback failed: {fallback_err}")
-            raise e
+        print(f"ERROR: Password authentication failed — verify credentials. Detail: {e}")
+        transport.close()
+        sys.exit(1)
+
+    sftp = paramiko.SFTPClient.from_transport(transport)
 
     cwd = sftp.normalize('.')
     print(f"Connected successfully! Current remote directory: {cwd}")
@@ -125,7 +109,7 @@ def main():
     except Exception:
         pass
     try:
-        ssh.close()
+        transport.close()
     except Exception:
         pass
     print(f"Deployment complete! Successfully uploaded {uploaded} files.")
