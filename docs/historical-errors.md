@@ -133,3 +133,18 @@
   - Bind all inter-language back-links to `site.Home.RelPermalink` rather than hardcoded `/`.
   - Normalize Open Graph `og:locale` to underscore notation (`it_IT`, `en_US`) and emit `og:locale:alternate`.
   - Explicitly disable unused SSG taxonomy kinds (`disableKinds = ['taxonomy', 'term']`) in `hugo.toml` to prevent thin or unlocalized orphan pages.
+
+---
+
+### [Theme Architecture & Mobile Ergonomics] Base Heading Dark Mode Inversion Leaks, Past-Event Contrast & Multi-Instance Toggle Synchronization
+- **Context**: Multilingual static websites with client-side dark mode toggling, dynamic date-based status attenuation (e.g. past events), and mobile-first responsive navigation.
+- **Root Cause**:
+  1. *Hardcoded Dark Hex Values in Base Typography*: Declaring fixed dark hex colors (such as `#171615` on `h1-h6` or `#272523` on `.page-body`) instead of semantic CSS variables (`var(--color-text)`) causes unstyled headings (e.g. `.intro-text-box h2`) and body text to remain dark when background surfaces shift to ebony/charcoal (`#151312` / `#201D1B`), collapsing contrast to unreadable black-on-black (~1.05:1).
+  2. *Asymmetric Attenuation Rules on State-Altered Components*: Attenuating past or completed items via hardcoded muted colors (e.g. `.calendar-event-card.is-past .event-card-title { color: #4a4640; }`) without declaring paired dark-mode selectors overrides global text variables due to CSS specificity `(0, 2, 1)`, resulting in illegible dark grey on dark surfaces (~1.8:1).
+  3. *Unprotected Client-Side Storage & Footer-Only Mobile Ergonomics*: Reading `localStorage` unconditionally on language negotiation scripts without `try/catch` causes script termination in strict/private mobile browsing environments before theme event listeners are bound. Furthermore, confining the theme toggle exclusively to the bottom footer forces mobile users to scroll through entire archives to toggle appearances.
+- **Prevention Patterns**:
+  - Always bind base headings and typography to semantic tokens (`var(--color-text)` or `--color-bordeaux`), ensuring uniform automatic adaptation across both Light and Dark palettes.
+  - Whenever defining state attenuation styles (`.is-past`, `.is-disabled`), always pair them with explicit dark-mode overrides (`:root[data-theme="dark"] .is-past ... { color: #D2CCC2; }`) to maintain WCAG AAA contrast (> 7:1) against dark surfaces.
+  - Always wrap client storage calls (`localStorage`) in `try/catch` and initialize theme listeners early in `DOMContentLoaded`.
+  - Provide synchronized multi-instance theme toggles via `querySelectorAll('.theme-toggle-btn')`, exposing immediate toggling within the mobile navigation drawer (`.site-nav`) as well as the global footer.
+

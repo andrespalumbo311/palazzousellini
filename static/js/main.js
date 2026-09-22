@@ -33,7 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. Scroll Reveal via IntersectionObserver (solo sotto la piega, zero ritardi all'apertura)
+  // 3. Selettore Tema Scuro / Chiaro (Inizializzato subito per massima reattività)
+  initThemeToggle();
+
+  // 4. Scroll Reveal via IntersectionObserver (solo sotto la piega, zero ritardi all'apertura)
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!prefersReducedMotion && 'IntersectionObserver' in window) {
     const revealElements = document.querySelectorAll('.reveal, .reveal-stagger');
@@ -72,9 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof L !== 'undefined') initLeafletMap();
     });
   }
-
-  // 8. Selettore Tema Scuro / Chiaro
-  initThemeToggle();
 });
 
 function initLeafletMap() {
@@ -284,13 +284,15 @@ function initLanguagePreference() {
   // Intercetta click sui link lingua — salva la preferenza PRIMA di navigare
   const langLinks = document.querySelectorAll('.lang-switcher .lang-link');
   langLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
+    link.addEventListener('click', () => {
       const label = link.textContent.trim().toUpperCase();
-      if (label === 'EN') {
-        localStorage.setItem(storageKey, 'en');
-      } else if (label === 'IT') {
-        localStorage.setItem(storageKey, 'it');
-      }
+      try {
+        if (label === 'EN') {
+          localStorage.setItem(storageKey, 'en');
+        } else if (label === 'IT') {
+          localStorage.setItem(storageKey, 'it');
+        }
+      } catch (err) {}
       // Lascia il browser navigare normalmente dopo aver salvato la preferenza
     });
   });
@@ -299,20 +301,22 @@ function initLanguagePreference() {
   // per non interferire con link diretti o navigazione manuale
   if (path !== '/' && path !== '/index.html') return;
 
-  const savedLang = localStorage.getItem(storageKey);
+  try {
+    const savedLang = localStorage.getItem(storageKey);
 
-  // Preferenza esplicita dell'utente: rispettarla sempre
-  if (savedLang === 'it') return;
-  if (savedLang === 'en') {
-    window.location.replace('/en/');
-    return;
-  }
+    // Preferenza esplicita dell'utente: rispettarla sempre
+    if (savedLang === 'it') return;
+    if (savedLang === 'en') {
+      window.location.replace('/en/');
+      return;
+    }
 
-  // Prima visita: rilevamento browser, default inglese se non italiano
-  const navLang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-  if (!navLang.toLowerCase().startsWith('it')) {
-    window.location.replace('/en/');
-  }
+    // Prima visita: rilevamento browser, default inglese se non italiano
+    const navLang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+    if (!navLang.toLowerCase().startsWith('it')) {
+      window.location.replace('/en/');
+    }
+  } catch (e) {}
 }
 
 function initLightbox() {
@@ -418,20 +422,22 @@ function initLightbox() {
 }
 
 function initThemeToggle() {
-  const toggleBtn = document.getElementById('theme-toggle');
-  if (!toggleBtn) return;
+  const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
+  if (toggleBtns.length === 0) return;
 
   const storageKey = 'palazzo_usellini_theme';
-  const labelEl = toggleBtn.querySelector('.theme-toggle-label');
   const isEnglish = document.documentElement.lang && document.documentElement.lang.startsWith('en');
 
   const updateUI = (isDark) => {
     const visibleText = isEnglish ? (isDark ? 'Theme: Dark' : 'Theme: Light') : (isDark ? 'Tema: Scuro' : 'Tema: Chiaro');
-    if (labelEl) {
-      labelEl.textContent = visibleText;
-    }
-    toggleBtn.setAttribute('aria-label', visibleText);
-    toggleBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+    toggleBtns.forEach(btn => {
+      const labelEl = btn.querySelector('.theme-toggle-label');
+      if (labelEl) {
+        labelEl.textContent = visibleText;
+      }
+      btn.setAttribute('aria-label', visibleText);
+      btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+    });
   };
 
   const getEffectiveTheme = () => {
@@ -443,14 +449,16 @@ function initThemeToggle() {
 
   updateUI(getEffectiveTheme() === 'dark');
 
-  toggleBtn.addEventListener('click', () => {
-    const current = getEffectiveTheme();
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    try {
-      localStorage.setItem(storageKey, next);
-    } catch (e) {}
-    updateUI(next === 'dark');
+  toggleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const current = getEffectiveTheme();
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try {
+        localStorage.setItem(storageKey, next);
+      } catch (e) {}
+      updateUI(next === 'dark');
+    });
   });
 
   if (window.matchMedia) {
