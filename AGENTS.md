@@ -14,6 +14,20 @@ Static website for **Palazzo Usellini** (Arona, NO, Italy) - [palazzousellini.co
   - `--color-giallo-portico` (`#DCAE45`): Internal courtyard portico stucco.
   - `--color-azzurro-facciata` (`#EDF3F7`): Restored exterior facade on Via Pertossi.
 
+## Editorial & Content Guidelines (Tone of Voice & Entity Naming)
+- **Tone of Voice**: Asciutto, sobrio, fattuale e diretto. Evitare formule enfatiche, liriche o promozionali (es. no "viaggi suggestivi", no aggettivazione enfatica).
+- **Ruolo Istituzionale**: Palazzo Usellini non organizza eventi; **ospita** concerti, rassegne e manifestazioni culturali nel proprio giardino o corte. Utilizzare formulazioni chiare ("Casa Usellini ospita...") e mai indicare la dimora come organizzatrice o co-organizzatrice.
+- **Nomenclatura Corretta**:
+  - Usare **Casa Usellini** per gli eventi, i concerti e le attività nel giardino o negli spazi della dimora.
+  - Usare **Palazzo Usellini** per l'istituzione complessiva, la storia e la denominazione del sito.
+  - **Mai usare "Villa Usellini"**.
+- **Neutralità su Sponsor e Patrocini**: Non menzionare sponsor privati, imprese terze o patrocini comunali riportati su locandine o comunicati esterni; la comunicazione del sito riguarda unicamente la dimora e il programma artistico ospitato.
+- **Inbox Ingestion Workflow**:
+  - Elaborare i materiali in `inbox/` generando locandine e foto direttamente ad alta definizione e convertendole in WebP via skill `.agents/skills/optimize-images/scripts/optimize_image.sh`.
+  - Creare page bundle bilingue (`index.md` e `index.en.md`) e popolare la voce `events:` nel frontmatter per la sincronizzazione immediata con il calendario della homepage.
+  - Non inserire link markdown `[num](tel:...)` per evitare la sanitizzazione Go/Hugo (`#ZgotmplZ`); formattare i numeri come testo chiaro (es. `Tel. 342.0057160`).
+  - Rimuovere i file temporanei dalla cartella `inbox/` a fine lavorazione.
+
 ## Image Management Standard
 - **Skill**: Standardized via project skill [`.agents/skills/optimize-images/`](file:///.agents/skills/optimize-images/SKILL.md).
 - **Tooling**: Use Homebrew `cwebp` and `magick` (`./.agents/skills/optimize-images/scripts/optimize_image.sh`).

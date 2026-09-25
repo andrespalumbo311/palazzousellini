@@ -15,3 +15,10 @@ This folder serves as your **temporary upload drop zone**.
 
 ### 🗓️ Automatic Homepage Calendar Integration
 Whenever an uploaded draft or press release contains specific concert dates or season itineraries, the assistant automatically populates the `events:` frontmatter list in the article. These events are immediately picked up by the homepage calendar, displaying date badges, time, performer names, and automatically retiring past events on a daily basis.
+
+### ✍️ Editorial Guidelines for Agents
+- **Authentic Naming**: Use **Casa Usellini** for hosted events and garden concerts; use **Palazzo Usellini** for the global historical monument. **Never use "Villa Usellini"**.
+- **Host Demarcation**: Casa Usellini solely **hosts** events (*"Casa Usellini ospita..."*). Do not frame the property as organizer or co-organizer.
+- **Dry & Factual Tone**: Keep copy concise and strictly informative (date, time, performers, practical info). Avoid marketing rhetoric or lyrical flourishes.
+- **Sponsor & Patronage Neutrality**: Omit third-party commercial sponsors and civic patronages appearing on partner flyers.
+- **Phone Formatting**: Write telephone numbers as plain text (e.g. `Tel. 342.0057160`), never as Markdown `[num](tel:...)` links to prevent template engine sanitization (`#ZgotmplZ`).
