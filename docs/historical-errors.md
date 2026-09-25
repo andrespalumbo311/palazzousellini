@@ -148,3 +148,12 @@
   - Always wrap client storage calls (`localStorage`) in `try/catch` and initialize theme listeners early in `DOMContentLoaded`.
   - Provide synchronized multi-instance theme toggles via `querySelectorAll('.theme-toggle-btn')`, exposing immediate toggling within the mobile navigation drawer (`.site-nav`) as well as the global footer.
 
+---
+
+### [Content & Template Security] URI Sanitization and #ZgotmplZ Token Injection on Non-Standard Protocols
+- **Context**: Content creation with contact information (phone numbers, custom links) inside Markdown files processed by Hugo SSG and Go's `html/template` engine.
+- **Root Cause**: Go's contextual HTML sanitizer strictly enforces safe URL schemes (`http:`, `https:`, `mailto:`, relative paths). Non-standard protocols in Markdown links like `[123](tel:+39123)` are flagged as untrusted URI contexts during pipeline evaluation unless explicitly permitted, replacing the URL target with `#ZgotmplZ` in generated static HTML.
+- **Prevention Patterns**:
+  - Prefer plain, clearly formatted telephone strings (e.g. `Tel. 342.0057160`) in Markdown content. Modern mobile web browsers and mobile OSes automatically detect and turn valid telephone patterns into tappable dial links natively without requiring unsafe link markup.
+  - If protocol links are strictly required, configure Goldmark link render hooks or sanitize rules to allow the scheme explicitly rather than relying on raw markdown link evaluation.
+
