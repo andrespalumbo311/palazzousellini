@@ -15,17 +15,17 @@ Static website for **Palazzo Usellini** (Arona, NO, Italy) - [palazzousellini.co
   - `--color-azzurro-facciata` (`#EDF3F7`): Restored exterior facade on Via Pertossi.
 
 ## Editorial & Content Guidelines (Tone of Voice & Entity Naming)
-- **Tone of Voice**: Asciutto, sobrio, fattuale e diretto. Evitare formule enfatiche, liriche o promozionali (es. no "viaggi suggestivi", no aggettivazione enfatica).
-- **Ruolo Istituzionale**: Palazzo Usellini non organizza eventi; **ospita** concerti, rassegne e manifestazioni culturali nel proprio giardino o corte. Utilizzare formulazioni chiare ("Casa Usellini ospita...") e mai indicare la dimora come organizzatrice o co-organizzatrice.
-- **Nomenclatura Corretta**:
-  - Usare **Casa Usellini** per gli eventi, i concerti e le attività nel giardino o negli spazi della dimora.
-  - Usare **Palazzo Usellini** per l'istituzione complessiva, la storia e la denominazione del sito.
-- **Ambito della Comunicazione**: La comunicazione del sito riguarda unicamente la dimora e il programma culturale e artistico ospitato nei suoi spazi.
+- **Tone of Voice**: Dry, sober, factual, and direct. Avoid emphatic, lyrical, or promotional phrasing (e.g. no "evocative journeys", no embellished adjectives).
+- **Institutional Role**: Palazzo Usellini does not organize events; it solely **hosts** concerts, festivals, and cultural events within its garden or courtyard. Use clear phrasing (*"Casa Usellini hosts..."*) and never frame the residence as organizer or co-organizer.
+- **Authentic Naming**:
+  - Use **Casa Usellini** for events, concerts, and activities taking place in the garden or inner spaces of the residence.
+  - Use **Palazzo Usellini** for the global historic institution, history, and overall site naming.
+- **Content Scope**: Site communication strictly pertains to the historic residence and the cultural and artistic program hosted within its grounds.
 - **Inbox Ingestion Workflow**:
-  - Elaborare i materiali in `inbox/` generando locandine e foto direttamente ad alta definizione e convertendole in WebP via skill `.agents/skills/optimize-images/scripts/optimize_image.sh`.
-  - Creare page bundle bilingue (`index.md` e `index.en.md`) e popolare la voce `events:` nel frontmatter per la sincronizzazione immediata con il calendario della homepage.
-  - Non inserire link markdown `[num](tel:...)` per evitare la sanitizzazione Go/Hugo (`#ZgotmplZ`); formattare i numeri come testo chiaro (es. `Tel. 342.0057160`).
-  - Rimuovere i file temporanei dalla cartella `inbox/` a fine lavorazione.
+  - Process raw materials in `inbox/` by rendering flyers and photos in high resolution and converting them to WebP via the project skill `.agents/skills/optimize-images/scripts/optimize_image.sh`.
+  - Create bilingual page bundles (`index.md` and `index.en.md`) and populate the `events:` frontmatter parameter for seamless synchronization with the homepage calendar.
+  - Do not use markdown `[num](tel:...)` links to prevent Go/Hugo template sanitization (`#ZgotmplZ`); format phone numbers as clean plain text (e.g. `Tel. 342.0057160`).
+  - Remove temporary source files from `inbox/` once processing is complete.
 
 ## Image Management Standard
 - **Skill**: Standardized via project skill [`.agents/skills/optimize-images/`](file:///.agents/skills/optimize-images/SKILL.md).

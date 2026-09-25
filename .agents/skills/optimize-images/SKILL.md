@@ -1,50 +1,50 @@
 ---
 name: optimize-images
-description: Ottimizzazione, ridimensionamento, rimozione metadati EXIF e conversione in WebP per le immagini del sito Palazzo Usellini.
+description: Image optimization, resizing, EXIF metadata stripping, and WebP conversion for Palazzo Usellini website imagery.
 ---
 
 # Skill: Image Optimization Protocol (Palazzo Usellini)
 
-## Scopo & Contesto
-Questa skill standardizza il trattamento di qualsiasi immagine aggiunta o aggiornata nel repository del sito di **Palazzo Usellini**. Assicura che le fotografie storiche, le locandine dei concerti e gli scorci della dimora siano veloci da scaricare da dispositivi mobili, rispettino la privacy (stripping EXIF/GPS) e preservino un'elevata fedeltà estetica.
+## Purpose & Context
+This skill standardizes the processing of any image added or updated in the **Palazzo Usellini** repository. It ensures that historical photographs, concert posters, and residence views download quickly on mobile devices, safeguard location privacy (EXIF/GPS stripping), and preserve high aesthetic fidelity.
 
-## Quando Utilizzare questa Skill
-Attiva questa procedura ogni volta che:
-- Viene aggiunta una nuova immagine di copertina (`hero.jpg`, `hero.webp`) o un banner a tutta pagina.
-- Vengono caricate nuove foto per la sezione **Galleria** (`content/galleria/gallery/`).
-- Vengono pubblicati nuovi articoli con locandine di concerti, foto di artisti o rassegne estive (`content/news/<slug>/`).
-- Si riscontrano rallentamenti LCP (*Largest Contentful Paint*) dovuti a file superiori a 400 KB.
+## When to Use This Skill
+Activate this procedure whenever:
+- Adding a new cover hero image (`hero.jpg`, `hero.webp`) or full-page banner.
+- Uploading new photographs for the **Gallery** section (`content/galleria/gallery/`).
+- Publishing new articles with concert posters, artist portraits, or summer festival materials (`content/news/<slug>/`).
+- Addressing LCP (*Largest Contentful Paint*) regressions caused by files exceeding 400 KB.
 
 ---
 
-## Profili di Risoluzione & Compressione
+## Resolution & Compression Profiles
 
-| Profilo | Destinazione d'Uso | Larghezza Max | Formato | Qualità | Target Peso |
+| Profile | Target Usage | Max Width | Format | Quality | Target Size |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **`hero`** | Hero Home, banner d'apertura | `2000px` | `.webp` / `.jpg` | `85%` | &le; 350 KB |
-| **`gallery`** | Monografie, foto palazzo, articoli | `1400px` | `.webp` | `82%` | 80 – 150 KB |
-| **`thumb`** | Miniature griglia news, avatar | `800px` | `.webp` | `80%` | &le; 50 KB |
+| **`hero`** | Homepage hero, full-width banners | `2000px` | `.webp` / `.jpg` | `85%` | &le; 350 KB |
+| **`gallery`** | Monographs, estate photography, articles | `1400px` | `.webp` | `82%` | 80 – 150 KB |
+| **`thumb`** | News grid thumbnails, avatars | `800px` | `.webp` | `80%` | &le; 50 KB |
 
 ---
 
-## Esecuzione tramite Helper Script
+## Execution via Helper Script
 
-Lo script helper è posizionato in `scripts/optimize_image.sh`:
+The helper script is located at `scripts/optimize_image.sh`:
 
 ```bash
-# Ottimizzazione immagine Hero a tutto schermo
+# Full-width hero image optimization
 ./.agents/skills/optimize-images/scripts/optimize_image.sh --profile hero static/images/hero.jpg
 
-# Ottimizzazione singola foto per articolo o galleria
-./.agents/skills/optimize-images/scripts/optimize_image.sh --profile gallery content/news/mio-evento/locandina.png
+# Single photo optimization for article or gallery
+./.agents/skills/optimize-images/scripts/optimize_image.sh --profile gallery content/news/my-event/poster.png
 
-# Elaborazione batch di un'intera cartella
+# Batch processing an entire folder
 ./.agents/skills/optimize-images/scripts/optimize_image.sh --profile gallery content/galleria/gallery/*.jpg
 ```
 
 ---
 
-## Standard & Convenzioni Obbligatorie
-1. **Zero Metadati (Privacy)**: Tutti i metadati EXIF, GPS e date di scatto della fotocamera devono essere eliminati (`-strip` o `-metadata none`).
-2. **Nomenclatura Kebab-Case**: Solo caratteri minuscoli alfanumerici e trattini (es. `2026-concerto-violino.webp`). Mai spazi, caratteri speciali o suffissi casuali (`-scaled`, `Screenshot_...`).
-3. **WebP First**: Preferire sempre `.webp` per il caricamento via web, mantenendo l'eventuale fallback JPEG solo dove esplicitamente richiesto da template legacy.
+## Mandatory Standards & Conventions
+1. **Zero Metadata (Privacy)**: All EXIF, GPS, and camera capture timestamps must be eliminated (`-strip` or `-metadata none`).
+2. **Kebab-Case Naming**: Alphanumeric lowercase characters and hyphens only (e.g. `2026-violin-concert.webp`). Never use spaces, special characters, or arbitrary suffixes (`-scaled`, `Screenshot_...`).
+3. **WebP First**: Always favor `.webp` for web delivery, retaining fallback JPEG only where explicitly mandated by legacy templates.

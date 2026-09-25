@@ -17,16 +17,16 @@ KEEP_ORIGINAL=false
 CUSTOM_OUTPUT=""
 
 print_usage() {
-  echo "Uso: $0 [--profile hero|gallery|thumb] [--quality 1-100] [--keep-original] [--output file.webp] <file_immagine...>"
+  echo "Usage: $0 [--profile hero|gallery|thumb] [--quality 1-100] [--keep-original] [--output file.webp] <image_files...>"
   echo ""
-  echo "Profili:"
-  echo "  hero     : Max 2000px, Qualità 85% (per banner full-width / hero background)"
-  echo "  gallery  : Max 1400px, Qualità 82% (per foto della galleria e figure articoli)"
-  echo "  thumb    : Max 800px,  Qualità 80% (per miniature e card di anteprima)"
+  echo "Profiles:"
+  echo "  hero     : Max 2000px, Quality 85% (for full-width hero banners / cover backgrounds)"
+  echo "  gallery  : Max 1400px, Quality 82% (for gallery photos and article figures)"
+  echo "  thumb    : Max 800px,  Quality 80% (for thumbnails and preview cards)"
   exit 1
 }
 
-# Parsing argomenti
+# Parse command line arguments
 POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -57,20 +57,20 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [ ${#POSITIONAL_ARGS[@]} -eq 0 ]; then
-  echo "Errore: Nessun file immagine specificato."
+  echo "Error: No image files specified."
   print_usage
 fi
 
-# Verifica dipendenze
+# Verify dependencies
 MAGICK_BIN=$(which magick 2>/dev/null || which convert 2>/dev/null || true)
 CWEBP_BIN=$(which cwebp 2>/dev/null || true)
 
 if [ -z "$MAGICK_BIN" ] && [ -z "$CWEBP_BIN" ]; then
-  echo "Errore: Impossibile trovare né 'magick' né 'cwebp' in PATH. Assicurati che Homebrew sia configurato."
+  echo "Error: Neither 'magick' nor 'cwebp' found in PATH. Ensure Homebrew is configured."
   exit 1
 fi
 
-# Definizione parametri per profilo
+# Define profile parameters
 case "$PROFILE" in
   hero)
     MAX_DIM=2000
@@ -99,10 +99,10 @@ format_bytes() {
   fi
 }
 
-# Elaborazione di ciascun file
+# Process each file
 for input_file in "${POSITIONAL_ARGS[@]}"; do
   if [ ! -f "$input_file" ]; then
-    echo "Attenzione: File non trovato: $input_file (salto)"
+    echo "Warning: File not found: $input_file (skipping)"
     continue
   fi
 
@@ -117,12 +117,10 @@ for input_file in "${POSITIONAL_ARGS[@]}"; do
     output_file="${dir_name}/${name_without_ext}.webp"
   fi
 
-  echo "Elaborazione [$PROFILE | ${MAX_DIM}px | Q:${FINAL_QUALITY}%]: $input_file"
+  echo "Processing [$PROFILE | ${MAX_DIM}px | Q:${FINAL_QUALITY}%]: $input_file"
 
-  # Utilizzo di cwebp o magick per ridimensionamento, rimozione EXIF e WebP
+  # Use cwebp or magick for resizing, EXIF stripping, and WebP conversion
   if [ -n "$CWEBP_BIN" ]; then
-    # cwebp gestisce direttamente resize (-resize width height con aspect ratio o tramite ImageMagick preprocess)
-    # Per ridimensionamento con vincolo proporzionale max (downscale only), usiamo ImageMagick se presente per pipeline robusta
     if [ -n "$MAGICK_BIN" ]; then
       "$MAGICK_BIN" "$input_file" -strip -resize "${MAX_DIM}x${MAX_DIM}>" -quality "$FINAL_QUALITY" "$output_file"
     else
@@ -137,14 +135,11 @@ for input_file in "${POSITIONAL_ARGS[@]}"; do
   new_fmt=$(format_bytes "$new_size")
   savings=$(awk -v o="$orig_size" -v n="$new_size" 'BEGIN { printf "%.1f", ((o - n) / o) * 100 }')
 
-  echo "  ✓ Generato: $output_file ($orig_fmt -> $new_fmt, risparmio: -$savings%)"
+  echo "  ✓ Generated: $output_file ($orig_fmt -> $new_fmt, savings: -$savings%)"
 
-  # Se l'output sovrascrive lo stesso file o se non è richiesta conservazione ed è cambiato formato
   if [ "$KEEP_ORIGINAL" = false ] && [ "$input_file" != "$output_file" ]; then
-    # Verifica se l'utente vuole mantenere o rimuovere l'originale
-    # Per sicurezza in batch, lasciamo l'originale a meno che non sia specificato
     :
   fi
 done
 
-echo "Ottimizzazione completata con successo."
+echo "Optimization completed successfully."
