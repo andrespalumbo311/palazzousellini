@@ -20,8 +20,7 @@ Static website for **Palazzo Usellini** (Arona, NO, Italy) - [palazzousellini.co
 - **Nomenclatura Corretta**:
   - Usare **Casa Usellini** per gli eventi, i concerti e le attività nel giardino o negli spazi della dimora.
   - Usare **Palazzo Usellini** per l'istituzione complessiva, la storia e la denominazione del sito.
-  - **Mai usare "Villa Usellini"**.
-- **Neutralità su Sponsor e Patrocini**: Non menzionare sponsor privati, imprese terze o patrocini comunali riportati su locandine o comunicati esterni; la comunicazione del sito riguarda unicamente la dimora e il programma artistico ospitato.
+- **Ambito della Comunicazione**: La comunicazione del sito riguarda unicamente la dimora e il programma culturale e artistico ospitato nei suoi spazi.
 - **Inbox Ingestion Workflow**:
   - Elaborare i materiali in `inbox/` generando locandine e foto direttamente ad alta definizione e convertendole in WebP via skill `.agents/skills/optimize-images/scripts/optimize_image.sh`.
   - Creare page bundle bilingue (`index.md` e `index.en.md`) e popolare la voce `events:` nel frontmatter per la sincronizzazione immediata con il calendario della homepage.

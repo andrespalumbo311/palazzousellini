@@ -164,11 +164,11 @@
 - **Root Cause**:
   1. *Institutional Misattribution*: Assuming that a historic venue hosting a concert or exhibition is also the organizing or co-organizing entity, leading to inaccurate statements ("organizzato in collaborazione con...").
   2. *Promotional Tone & Lyrical Drift*: Copying or generating flowery marketing rhetoric (e.g. "suggestivo viaggio tra arie...", "quiete e fascino della dimora") that contradicts the sober, direct, and factual tone expected for a historic cultural site.
-  3. *Leakage of Third-Party Sponsorships and Patronages*: Carrying over private commercial sponsors and municipal patronages from partner posters into the official palace news, violating institutional neutrality.
-  4. *Toponymic Inaccuracy*: Mistaking the historic property designation by introducing terms like "Villa Usellini" instead of the authenticated historical forms (**Casa Usellini** for inner residence/garden events and **Palazzo Usellini** for the global monumental entity).
+  3. *Scope Creep*: Extending article copy beyond the residence and the artistic program with external partner mentions or notices.
+  4. *Toponymic Inaccuracy*: Departing from the authenticated historical forms (**Casa Usellini** for inner residence/garden events and **Palazzo Usellini** for the global monumental entity).
 - **Prevention Patterns**:
   - Maintain a dry, factual, and strictly informative tone: list date, time, performers, location, and practical details without promotional fluff.
   - Strictly limit the property's role to venue host: always state "Casa Usellini ospita..." without asserting co-organization or institutional partnership.
-  - Strictly exclude third-party commercial sponsor acknowledgments or civic patronages unless explicitly requested by the property owner.
-  - Enforce authentic nomenclature: always use **Casa Usellini** for resident events/garden concerts, **Palazzo Usellini** for institutional/architectural context, and strictly prohibit "Villa Usellini".
+  - Focus site communication strictly on the venue and its hosted artistic program.
+  - Apply authentic nomenclature consistently: use **Casa Usellini** for resident events/garden concerts, and **Palazzo Usellini** for institutional/architectural context.
 
