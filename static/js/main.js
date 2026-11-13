@@ -18,23 +18,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2. Menu Mobile Drawer
   const menuToggle = document.querySelector('.menu-toggle');
-  if (menuToggle) {
+  const siteNav = document.getElementById('site-nav');
+  if (menuToggle && siteNav) {
+    const closeMenu = (restoreFocus = false) => {
+      if (!document.body.classList.contains('nav-open')) return;
+      document.body.classList.remove('nav-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      if (restoreFocus) menuToggle.focus();
+    };
+
     menuToggle.addEventListener('click', () => {
       const isOpen = document.body.classList.toggle('nav-open');
-      menuToggle.setAttribute('aria-expanded', isOpen);
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
     });
 
-    // Chiude il menu mobile quando si clicca su un link o fuori
-    document.querySelectorAll('.site-nav a').forEach(link => {
-      link.addEventListener('click', () => {
-        document.body.classList.remove('nav-open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-      });
+    // Chiude il menu mobile quando si clicca su un link, fuori o con Escape
+    siteNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => closeMenu(false));
+    });
+    document.addEventListener('click', (e) => {
+      if (!siteNav.contains(e.target) && !menuToggle.contains(e.target)) {
+        closeMenu(false);
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu(true);
     });
   }
 
   // 3. Selettore Tema Scuro / Chiaro (Inizializzato subito per massima reattività)
   initThemeToggle();
+
+  // 4. Fallback --sibling-index per browser senza sibling-index() CSS
+  if (!CSS.supports('animation-delay: calc(sibling-index() * 0.1s)')) {
+    document.querySelectorAll('.reveal-stagger').forEach(container => {
+      [...container.children].forEach((el, index) => {
+        el.style.setProperty('--sibling-index', Math.min(index + 1, 7));
+      });
+    });
+  }
 
   // 4. Scroll Reveal via IntersectionObserver (solo sotto la piega, zero ritardi all'apertura)
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -121,6 +143,7 @@ function initEventCalendar() {
   if (eventCards.length === 0) return;
 
   const statusBar = container.querySelector('.calendar-status-bar');
+  if (statusBar) statusBar.setAttribute('aria-live', 'polite');
   const filterBtns = Array.from(container.querySelectorAll('.year-filter-btn'));
   const upcomingGroup = container.querySelector('.calendar-upcoming-group');
   const pastGroup = container.querySelector('.calendar-past-group');
@@ -324,19 +347,21 @@ function initLightbox() {
   if (galleryLinks.length === 0) return;
 
   const isEn = (document.documentElement.lang || '').toLowerCase().startsWith('en');
+  const dialogLabel = isEn ? 'Image gallery' : 'Galleria immagini';
   const closeLabel = isEn ? 'Close' : 'Chiudi';
   const prevLabel = isEn ? 'Previous' : 'Precedente';
   const nextLabel = isEn ? 'Next' : 'Successivo';
 
-  // Crea elemento modale nel DOM
-  const modal = document.createElement('div');
+  // Crea elemento <dialog> nativo nel DOM (gestisce top-layer, inert, Esc e ripristino focus)
+  const modal = document.createElement('dialog');
   modal.className = 'lightbox-modal';
+  modal.setAttribute('closedby', 'any');
+  modal.setAttribute('aria-label', dialogLabel);
   modal.innerHTML = `
-    <div class="lightbox-backdrop"></div>
     <div class="lightbox-content">
-      <button class="lightbox-close" aria-label="${closeLabel}">&times;</button>
-      <button class="lightbox-nav lightbox-prev" aria-label="${prevLabel}">&#10094;</button>
-      <button class="lightbox-nav lightbox-next" aria-label="${nextLabel}">&#10095;</button>
+      <button type="button" class="lightbox-close" aria-label="${closeLabel}">&times;</button>
+      <button type="button" class="lightbox-nav lightbox-prev" aria-label="${prevLabel}">&#10094;</button>
+      <button type="button" class="lightbox-nav lightbox-next" aria-label="${nextLabel}">&#10095;</button>
       <div class="lightbox-figure">
         <img class="lightbox-img" src="" alt="">
         <p class="lightbox-caption"></p>
@@ -345,12 +370,12 @@ function initLightbox() {
   `;
   document.body.appendChild(modal);
 
+  const contentEl = modal.querySelector('.lightbox-content');
   const imgEl = modal.querySelector('.lightbox-img');
   const captionEl = modal.querySelector('.lightbox-caption');
   const closeBtn = modal.querySelector('.lightbox-close');
   const prevBtn = modal.querySelector('.lightbox-prev');
   const nextBtn = modal.querySelector('.lightbox-next');
-  const backdrop = modal.querySelector('.lightbox-backdrop');
 
   let currentIndex = 0;
 
@@ -373,13 +398,11 @@ function initLightbox() {
 
   const openLightbox = (index) => {
     showImage(index);
-    modal.classList.add('is-active');
-    document.body.style.overflow = 'hidden';
+    if (!modal.open) modal.showModal();
   };
 
   const closeLightbox = () => {
-    modal.classList.remove('is-active');
-    document.body.style.overflow = '';
+    if (modal.open) modal.close();
   };
 
   galleryLinks.forEach((link, idx) => {
@@ -390,14 +413,23 @@ function initLightbox() {
   });
 
   closeBtn.addEventListener('click', closeLightbox);
-  backdrop.addEventListener('click', closeLightbox);
   prevBtn.addEventListener('click', () => showImage(currentIndex - 1));
   nextBtn.addEventListener('click', () => showImage(currentIndex + 1));
 
-  // Supporto Tastiera
-  window.addEventListener('keydown', (e) => {
-    if (!modal.classList.contains('is-active')) return;
-    if (e.key === 'Escape') closeLightbox();
+  // Fallback light-dismiss per browser senza <dialog closedby="any">
+  if (!('closedBy' in HTMLDialogElement.prototype)) {
+    const outsideContent = (e) => {
+      if (e.target !== modal) return false;
+      const r = contentEl.getBoundingClientRect();
+      return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+    };
+    let pressedOutside = false;
+    modal.addEventListener('pointerdown', (e) => { pressedOutside = outsideContent(e); });
+    modal.addEventListener('pointerup', (e) => { if (pressedOutside && outsideContent(e)) closeLightbox(); });
+  }
+
+  // Navigazione con frecce da tastiera (Esc è gestito nativamente da <dialog>)
+  modal.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
     if (e.key === 'ArrowRight') showImage(currentIndex + 1);
   });
@@ -426,7 +458,28 @@ function initThemeToggle() {
   if (toggleBtns.length === 0) return;
 
   const storageKey = 'palazzo_usellini_theme';
+  const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+  const darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
   const isEnglish = document.documentElement.lang && document.documentElement.lang.startsWith('en');
+
+  const getSystemTheme = () => (darkQuery && darkQuery.matches ? 'dark' : 'light');
+
+  const getEffectiveTheme = () => {
+    const attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'dark' || attr === 'light') return attr;
+    return getSystemTheme();
+  };
+
+  const applyTheme = (storedTheme) => {
+    if (storedTheme === 'dark' || storedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', storedTheme);
+      if (colorSchemeMeta) colorSchemeMeta.content = storedTheme;
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      if (colorSchemeMeta) colorSchemeMeta.content = 'light dark';
+    }
+    updateUI(getEffectiveTheme() === 'dark');
+  };
 
   const updateUI = (isDark) => {
     const visibleText = isEnglish ? (isDark ? 'Theme: Dark' : 'Theme: Light') : (isDark ? 'Tema: Scuro' : 'Tema: Chiaro');
@@ -440,29 +493,26 @@ function initThemeToggle() {
     });
   };
 
-  const getEffectiveTheme = () => {
-    const attr = document.documentElement.getAttribute('data-theme');
-    if (attr === 'dark') return 'dark';
-    if (attr === 'light') return 'light';
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  };
-
   updateUI(getEffectiveTheme() === 'dark');
 
   toggleBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const current = getEffectiveTheme();
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      try {
-        localStorage.setItem(storageKey, next);
-      } catch (e) {}
-      updateUI(next === 'dark');
+      const target = current === 'dark' ? 'light' : 'dark';
+      const systemTheme = getSystemTheme();
+
+      if (target === systemTheme) {
+        try { localStorage.removeItem(storageKey); } catch (e) {}
+        applyTheme(null);
+      } else {
+        try { localStorage.setItem(storageKey, target); } catch (e) {}
+        applyTheme(target);
+      }
     });
   });
 
-  if (window.matchMedia) {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+  if (darkQuery) {
+    darkQuery.addEventListener('change', (e) => {
       try {
         if (!localStorage.getItem(storageKey)) {
           updateUI(e.matches);
@@ -470,4 +520,10 @@ function initThemeToggle() {
       } catch (err) {}
     });
   }
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === storageKey) {
+      applyTheme(e.newValue);
+    }
+  });
 }

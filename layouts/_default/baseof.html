@@ -68,29 +68,33 @@
   </script>
 
   <!-- Tema Scuro / Chiaro: Inizializzazione Immediata Anti-FOUC -->
+  <meta name="color-scheme" content="light dark">
   <script>
     (function() {
       try {
         const theme = localStorage.getItem('palazzo_usellini_theme');
         if (theme === 'dark' || theme === 'light') {
           document.documentElement.setAttribute('data-theme', theme);
+          document.querySelector('meta[name="color-scheme"]').content = theme;
         }
       } catch (e) {}
     })();
   </script>
 
   <!-- Fogli di Stile -->
-  <link rel="stylesheet" href="/css/style.css?v={{ now.Unix }}">
+  {{ $assetVersion := (time.AsTime hugo.BuildDate).Unix }}
+  <link rel="stylesheet" href="/css/style.css?v={{ $assetVersion }}">
 
   {{ if or (eq .Section "contatti") (eq .Type "contatti") (hasSuffix .RelPermalink "/contatti/") }}
-  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css?v={{ now.Unix }}">
-  <script src="/vendor/leaflet/leaflet.js?v={{ now.Unix }}" defer></script>
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css?v={{ $assetVersion }}">
+  <script src="/vendor/leaflet/leaflet.js?v={{ $assetVersion }}" defer></script>
   {{ end }}
 
   <!-- Script Interazioni e Lightbox (Differito per rendering istantaneo) -->
-  <script src="/js/main.js?v={{ now.Unix }}" defer></script>
+  <script src="/js/main.js?v={{ $assetVersion }}" defer></script>
 </head>
 <body>
+  <a href="#main" class="skip-link">{{ if eq site.Language.Lang "en" }}Skip to main content{{ else }}Vai al contenuto principale{{ end }}</a>
   <!-- Header del sito con effetto scroll e navigazione -->
   <header class="site-header">
     <div class="container header-container">
@@ -100,13 +104,13 @@
       </a>
 
       <div class="nav-and-lang">
-        <button class="menu-toggle" aria-label="{{ if eq site.Language.Lang "en" }}Open navigation menu{{ else }}Apri menu di navigazione{{ end }}" aria-expanded="false">
+        <button class="menu-toggle" aria-label="{{ if eq site.Language.Lang "en" }}Open navigation menu{{ else }}Apri menu di navigazione{{ end }}" aria-expanded="false" aria-controls="site-nav">
           <span></span>
           <span></span>
           <span></span>
         </button>
 
-        <nav class="site-nav">
+        <nav id="site-nav" class="site-nav">
           <ul>
             {{ range site.Menus.main }}
               <li class="{{ if or (eq $.RelPermalink .URL) (and (ne .URL site.Home.RelPermalink) (hasPrefix $.RelPermalink .URL)) }}active{{ end }}">
